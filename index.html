@@ -1219,6 +1219,56 @@ body.edit-mode [contenteditable]:focus {
 
 
 .tm-hidden { display: none !important; }
+
+/* Past Trips tab */
+.pt-empty {
+  font-size: 13px; color: var(--muted); font-style: italic;
+  text-align: center; padding: 2rem 1rem;
+}
+.pt-notice {
+  font-size: 11px; color: var(--muted); line-height: 1.55;
+  background: rgba(196,149,42,.06); border: 1px solid rgba(196,149,42,.2);
+  border-radius: 8px; padding: .6rem .85rem; margin-bottom: 1rem;
+}
+.pt-card {
+  background: var(--warm-white); border: 1px solid var(--border);
+  border-radius: 10px; padding: .85rem 1rem; margin-bottom: .75rem;
+  box-shadow: var(--shadow); transition: box-shadow .15s;
+}
+.pt-card:hover { box-shadow: var(--shadow-lg); }
+.pt-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 500; color: var(--ink); margin-bottom: 2px;
+}
+.pt-card-meta {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--muted); margin-bottom: .5rem;
+}
+.pt-card-dests {
+  font-size: 11.5px; color: var(--muted); margin-bottom: .75rem;
+  line-height: 1.5;
+}
+.pt-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.pt-btn {
+  padding: 5px 13px; border-radius: 6px; font-size: 11.5px;
+  font-weight: 500; cursor: pointer; border: 1px solid;
+  font-family: 'DM Sans', sans-serif; transition: all .15s;
+}
+.pt-btn-restore {
+  color: var(--mediterranean); border-color: rgba(42,107,138,.35);
+  background: transparent;
+}
+.pt-btn-restore:hover { background: rgba(42,107,138,.07); }
+.pt-btn-download {
+  color: var(--sage); border-color: rgba(90,122,90,.35);
+  background: transparent;
+}
+.pt-btn-download:hover { background: rgba(90,122,90,.07); }
+.pt-btn-delete {
+  color: rgba(196,90,42,.5); border-color: rgba(196,90,42,.2);
+  background: transparent; margin-left: auto;
+}
+.pt-btn-delete:hover { color: var(--terracotta); border-color: var(--terracotta); background: rgba(196,90,42,.06); }
 </style>
 </head>
 <body>
@@ -1234,6 +1284,7 @@ body.edit-mode [contenteditable]:focus {
       <button class="tm-tab active" onclick="switchTMTab('settings',this)">Trip Settings</button>
       <button class="tm-tab" onclick="switchTMTab('destinations',this)">Destinations</button>
       <button class="tm-tab" onclick="switchTMTab('days',this)">Day Cards</button>
+      <button class="tm-tab" onclick="switchTMTab('pasttrips',this)">Past Trips</button>
     </div>
     <div class="tm-body">
 
@@ -1275,10 +1326,10 @@ body.edit-mode [contenteditable]:focus {
         </div>
         <div class="tm-field" style="margin-top:1.25rem">
           <div class="tm-label" style="color:var(--terracotta)">Danger zone</div>
-          <button class="tm-apply-btn" style="background:rgba(196,90,42,.85);margin-top:.25rem" onclick="resetToBlankTrip()">
+          <button class="tm-apply-btn" style="background:rgba(196,90,42,.85);margin-top:.25rem" onclick="startNewTrip()">
             Start fresh — clear all content
           </button>
-          <p style="font-size:11px;color:var(--muted);margin-top:.4rem">Removes all day cards, port cards, and financials. Trip settings are kept. Use ↓ Save Copy first if you want to keep this trip.</p>
+          <p style="font-size:11px;color:var(--muted);margin-top:.4rem">Archives this trip to Past Trips, then wipes everything for a fresh start.</p>
         </div>
       </div>
 
@@ -1308,6 +1359,11 @@ body.edit-mode [contenteditable]:focus {
               <input type="date" class="tm-input" id="tmNewEnd">
             </div>
           </div>
+          <div class="tm-field" style="margin:0 0 .5rem">
+            <div class="tm-label">Color</div>
+            <div class="tm-color-swatches" id="tmNewSwatches"></div>
+            <input type="hidden" id="tmNewColor" value="#c4952a">
+          </div>
           <button class="tm-save-dest" onclick="addDestination()">Add to trip</button>
         </div>
       </div>
@@ -1316,6 +1372,14 @@ body.edit-mode [contenteditable]:focus {
       <div class="tm-tab-panel" id="tm-days">
         <p style="font-size:12px;color:var(--muted);margin-bottom:.85rem">Remove day cards you don't need, or add blank ones to any destination.</p>
         <div id="tmDaysList"></div>
+      </div>
+
+      <!-- PAST TRIPS TAB -->
+      <div class="tm-tab-panel" id="tm-pasttrips">
+        <div class="pt-notice">
+          💾 Past trips are saved in this browser only. Use <strong>Download</strong> on any past trip for a permanent backup file you can open anywhere.
+        </div>
+        <div id="ptList"></div>
       </div>
 
     </div>
@@ -1864,6 +1928,7 @@ body.edit-mode [contenteditable]:focus {
   <div class="section-h" style="font-size:1.2rem;margin-bottom:.75rem">Booking Links &amp; Resources</div>
   <p class="section-intro" style="margin-bottom:1rem">Quick-access links for everything you still need to book.</p>
 
+  <div data-links-dest="paris">
   <div class="link-section-title">Paris</div>
   <div class="link-grid">
     <div class="link-card lc"><div class="lc-cat urgent">⚠ Book when tickets open (late May)</div><a href="https://www.toureiffel.paris/en/the-monument/practical-information" target="_blank">Eiffel Tower — toureiffel.paris</a><div class="lc-note">Opens 60 days ahead. Summit sells out first. Set a reminder.</div></div>
@@ -1878,6 +1943,9 @@ body.edit-mode [contenteditable]:focus {
     <div class="link-card lc"><div class="lc-cat">Evening departure</div><a href="https://www.bateauxparisiens.com/en.html" target="_blank">Seine River Cruise — bateauxparisiens.com</a><div class="lc-note">1-hour cruise. Book sunset departure.</div></div>
   </div>
 
+  </div>
+
+  <div data-links-dest="amsterdam">
   <div class="link-section-title">Amsterdam</div>
   <div class="link-grid">
     <div class="link-card lc"><div class="lc-cat urgent">⚠ Book today — hardest ticket on the trip</div><a href="https://www.annefrank.org/en/museum/tickets/" target="_blank">Anne Frank House — annefrank.org</a><div class="lc-note">Sells out months ahead, especially during WorldPride week.</div></div>
@@ -1888,12 +1956,18 @@ body.edit-mode [contenteditable]:focus {
     <div class="link-card lc"><div class="lc-cat">Book timed entry</div><a href="https://www.heineken-experience.com/en/tickets" target="_blank">Heineken Experience — heineken-experience.com</a><div class="lc-note">Fun brewery tour. Optional but enjoyable.</div></div>
   </div>
 
+  </div>
+
+  <div data-links-dest="barcelona">
   <div class="link-section-title">Barcelona</div>
   <div class="link-grid">
     <div class="link-card lc"><div class="lc-cat urgent">⚠ Book morning slot for Aug 3</div><a href="https://www.sagradafamilia.org/en/tickets" target="_blank">Sagrada Família — sagradafamilia.org</a><div class="lc-note">Timed entry required. Often sold out weeks ahead in August.</div></div>
     <div class="link-card lc"><div class="lc-cat">Complete before Amsterdam</div><a href="https://www.royalcaribbean.com/booked/cruise-planner" target="_blank">RC Online Check-In — royalcaribbean.com</a><div class="lc-note">Upload passport photo, add emergency contact + credit card. Saves 30 min at the terminal.</div></div>
   </div>
 
+  </div>
+
+  <div data-links-dest="cruise">
   <div class="link-section-title">Rome — Train from Civitavecchia</div>
   <div class="link-grid">
     <div class="link-card lc"><div class="lc-cat">Buy before the port day</div><a href="https://www.trenitalia.com/en.html" target="_blank">Trenitalia — trenitalia.com</a><div class="lc-note">Civitavecchia → Roma San Pietro ~€5. Validate before boarding.</div></div>
@@ -1920,12 +1994,16 @@ body.edit-mode [contenteditable]:focus {
     <div class="link-card lc"><div class="lc-cat">Specialist service</div><a href="https://pantareichauffeurservice.rezgo.com/details/300657/private-transfer-brilliance-of-the-seas-ravenna-cruise-terminal-to-venice" target="_blank">Pantarei Chauffeur — pantareichauffeurservice.it</a><div class="lc-note">Specialist RC Brilliance transfer, Ravenna to Venice.</div></div>
   </div>
 
+  </div>
+
+  <div data-links-dest="venice">
   <div class="link-section-title">Venice</div>
   <div class="link-grid">
     <div class="link-card lc"><div class="lc-cat">Book timed entry</div><a href="https://palazzoducale.visitmuve.it/en/plan-your-visit/tickets/" target="_blank">Doge's Palace — visitmuve.it</a><div class="lc-note">Combo with St. Mark's Basilica available.</div></div>
     <div class="link-card lc"><div class="lc-cat">Free — timed slot</div><a href="https://www.prenotazionib.venetonet.it/" target="_blank">St. Mark's Basilica — venetonet.it</a><div class="lc-note">Free entry. Book timed slot to skip the queue.</div></div>
     <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://www.gallerieaccademia.it/en/visit-us" target="_blank">Gallerie dell'Accademia — gallerieaccademia.it</a><div class="lc-note">Venetian painting masterworks.</div></div>
     <div class="link-card lc"><div class="lc-cat">Get on arrival</div><a href="https://actv.avmspa.it/en/content/tickets-and-passes" target="_blank">Vaporetto Pass — actv.avmspa.it</a><div class="lc-note">48 or 72-hr unlimited pass. Buy at Piazzale Roma or Santa Lucia station.</div></div>
+  </div>
   </div>
 </div>
 
@@ -1934,34 +2012,34 @@ body.edit-mode [contenteditable]:focus {
   <div class="section-h">Full Calendar &nbsp;<span>·</span>&nbsp; July 25 – August 12</div>
   <p class="section-intro">Every day of the trip at a glance — from Paris arrival to Venice departure. Use this as your master reference for dates and sequencing.</p>
 
-  <div class="day-card">
+  <div class="day-card" data-cal-dest="all">
     <div class="day-header"><div class="day-title">Day-by-Day Overview</div></div>
     <div class="glance">
-      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Sat Jul 25</span><span class="glance-text">Fly into Paris CDG. Settle in. Trocadéro at nightfall for the Eiffel Tower sparkle show.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Sun Jul 26</span><span class="glance-text">Paris: Eiffel Tower summit · Musée d'Orsay · Seine River cruise at sunset.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Mon Jul 27</span><span class="glance-text">Paris: Louvre · Notre Dame · Sainte-Chapelle · Marais district · L'As du Fallafel.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Tue Jul 28</span><span class="glance-text">Paris: Versailles day trip — Hall of Mirrors · Grand Canal rowboat · Trianon palaces. Montmartre dinner.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Wed Jul 29</span><span class="glance-text">Paris: Catacombs · Arc de Triomphe · Champs-Élysées · Farewell Paris dinner. Pack for train tomorrow.</span></div>
-      <div class="glance-row glance-highlight"><span class="glance-time" style="color:#a07820">Thu Jul 30</span><span class="glance-text"><strong>TRAIN:</strong> Gare du Nord 10:55 AM → Amsterdam Centraal 2:20 PM. Arrive Amsterdam. Jordaan walk. WorldPride warm-up evening.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:#a07820">Fri Jul 31</span><span class="glance-text">Amsterdam: Anne Frank House · Nine Streets · Rijksmuseum · WorldPride Street Parties begin.</span></div>
-      <div class="glance-row glance-highlight"><span class="glance-time" style="color:#a07820">Sat Aug 1 ★</span><span class="glance-text"><strong>WorldPride CANAL PARADE</strong> — claim your spot early, starts ~1 PM. The crown jewel of the trip.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:#a07820">Sun Aug 2</span><span class="glance-text">Amsterdam: Rest day. Optional Van Gogh Museum. Early dinner. In bed by 9 PM. Alarms set for 4:15 AM.</span></div>
-      <div class="glance-row glance-highlight"><span class="glance-time" style="color:var(--sage)">Mon Aug 3</span><span class="glance-text"><strong>FLIGHT</strong> AMS 7:00 AM → BCN 9:15 AM. Airport → Port (drop bags) → Sagrada Família → tapas lunch → board. <strong>ALL ABOARD 4:30 PM · SHIP DEPARTS 5:00 PM.</strong></span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Tue Aug 4</span><span class="glance-text">CRUISE: Toulon, France · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Old Town · Mont Faron cable car · Aix-en-Provence excursion.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Wed Aug 5</span><span class="glance-text">CRUISE: Ajaccio, Corsica · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Maison Bonaparte · Little Train · Calanques de Piana.</span></div>
-      <div class="glance-row glance-highlight"><span class="glance-time" style="color:var(--mediterranean)">Thu Aug 6</span><span class="glance-text">CRUISE: Rome/Civitavecchia · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Train to Roma San Pietro · <strong>Vatican tour ✓</strong> · Trevi Fountain · Return by 6:15 PM.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Fri Aug 7</span><span class="glance-text">CRUISE: Naples · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Pompeii ruins (recommended) or Amalfi Coast. Back aboard by 6:15 PM.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Sat Aug 8</span><span class="glance-text">CRUISE: Messina, Sicily · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Cathedral clock at noon · Taormina (leave by 2:30 PM to make all-aboard).</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Sun Aug 9</span><span class="glance-text">CRUISE: Day at Sea · Pool · Spa · Specialty dinner · Set out luggage · Confirm Venice shuttle.</span></div>
-      <div class="glance-row glance-highlight"><span class="glance-time" style="color:#7846a0">Mon Aug 10</span><span class="glance-text"><strong>DISEMBARK</strong> Ravenna ~7 AM · Transfer to Venice (~2.5 hrs) · St. Mark's · Doge's Palace · Sunset gondola.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:#7846a0">Tue Aug 11</span><span class="glance-text">Venice: Rialto market (early) · Accademia gallery · Murano glass island · Burano · Final dinner.</span></div>
-      <div class="glance-row"><span class="glance-time" style="color:#7846a0">Wed Aug 12</span><span class="glance-text">Venice: Final espresso · Last gifts · Vaporetto or water taxi to Marco Polo Airport. <em>Arrivederci.</em></span></div>
+      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Sat Jul 25</span><span class="glance-text">Fly into Paris CDG. Settle in. Trocadéro at nightfall for the Eiffel Tower sparkle show.</span></div>
+      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Sun Jul 26</span><span class="glance-text">Paris: Eiffel Tower summit · Musée d'Orsay · Seine River cruise at sunset.</span></div>
+      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Mon Jul 27</span><span class="glance-text">Paris: Louvre · Notre Dame · Sainte-Chapelle · Marais district · L'As du Fallafel.</span></div>
+      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Tue Jul 28</span><span class="glance-text">Paris: Versailles day trip — Hall of Mirrors · Grand Canal rowboat · Trianon palaces. Montmartre dinner.</span></div>
+      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Wed Jul 29</span><span class="glance-text">Paris: Catacombs · Arc de Triomphe · Champs-Élysées · Farewell Paris dinner. Pack for train tomorrow.</span></div>
+      <div class="glance-row glance-highlight" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Thu Jul 30</span><span class="glance-text"><strong>TRAIN:</strong> Gare du Nord 10:55 AM → Amsterdam Centraal 2:20 PM. Arrive Amsterdam. Jordaan walk. WorldPride warm-up evening.</span></div>
+      <div class="glance-row" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Fri Jul 31</span><span class="glance-text">Amsterdam: Anne Frank House · Nine Streets · Rijksmuseum · WorldPride Street Parties begin.</span></div>
+      <div class="glance-row glance-highlight" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Sat Aug 1 ★</span><span class="glance-text"><strong>WorldPride CANAL PARADE</strong> — claim your spot early, starts ~1 PM. The crown jewel of the trip.</span></div>
+      <div class="glance-row" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Sun Aug 2</span><span class="glance-text">Amsterdam: Rest day. Optional Van Gogh Museum. Early dinner. In bed by 9 PM. Alarms set for 4:15 AM.</span></div>
+      <div class="glance-row glance-highlight" data-cal-dest="barcelona"><span class="glance-time" style="color:var(--sage)">Mon Aug 3</span><span class="glance-text"><strong>FLIGHT</strong> AMS 7:00 AM → BCN 9:15 AM. Airport → Port (drop bags) → Sagrada Família → tapas lunch → board. <strong>ALL ABOARD 4:30 PM · SHIP DEPARTS 5:00 PM.</strong></span></div>
+      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Tue Aug 4</span><span class="glance-text">CRUISE: Toulon, France · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Old Town · Mont Faron cable car · Aix-en-Provence excursion.</span></div>
+      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Wed Aug 5</span><span class="glance-text">CRUISE: Ajaccio, Corsica · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Maison Bonaparte · Little Train · Calanques de Piana.</span></div>
+      <div class="glance-row glance-highlight" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Thu Aug 6</span><span class="glance-text">CRUISE: Rome/Civitavecchia · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Train to Roma San Pietro · <strong>Vatican tour ✓</strong> · Trevi Fountain · Return by 6:15 PM.</span></div>
+      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Fri Aug 7</span><span class="glance-text">CRUISE: Naples · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Pompeii ruins (recommended) or Amalfi Coast. Back aboard by 6:15 PM.</span></div>
+      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Sat Aug 8</span><span class="glance-text">CRUISE: Messina, Sicily · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Cathedral clock at noon · Taormina (leave by 2:30 PM to make all-aboard).</span></div>
+      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Sun Aug 9</span><span class="glance-text">CRUISE: Day at Sea · Pool · Spa · Specialty dinner · Set out luggage · Confirm Venice shuttle.</span></div>
+      <div class="glance-row glance-highlight" data-cal-dest="venice"><span class="glance-time" style="color:#7846a0">Mon Aug 10</span><span class="glance-text"><strong>DISEMBARK</strong> Ravenna ~7 AM · Transfer to Venice (~2.5 hrs) · St. Mark's · Doge's Palace · Sunset gondola.</span></div>
+      <div class="glance-row" data-cal-dest="venice"><span class="glance-time" style="color:#7846a0">Tue Aug 11</span><span class="glance-text">Venice: Rialto market (early) · Accademia gallery · Murano glass island · Burano · Final dinner.</span></div>
+      <div class="glance-row" data-cal-dest="venice"><span class="glance-time" style="color:#7846a0">Wed Aug 12</span><span class="glance-text">Venice: Final espresso · Last gifts · Vaporetto or water taxi to Marco Polo Airport. <em>Arrivederci.</em></span></div>
     </div>
   </div>
 
   <div class="ornament">· · ·</div>
 
-  <div class="day-card">
+  <div class="day-card" data-dest-block="all">
     <div class="day-header"><div class="day-title">Booking Priority Order — Do These First</div></div>
     <ul class="checklist">
       <li><span class="ci-num">01</span><span><strong>Anne Frank House (Amsterdam)</strong> — annefrank.org. Book today. Nothing else on this trip sells out faster.</span></li>
@@ -3054,7 +3132,7 @@ function openTripManager() {
 function showAddDestForm() {
   const form = document.getElementById('tmAddForm');
   if (form) form.classList.add('visible');
-  renderSwatches('tmNewSwatches', 'tm-new-color', document.getElementById('tm-new-color')?.value || '#c4952a');
+  renderSwatches('tmNewSwatches', 'tmNewColor', document.getElementById('tmNewColor')?.value || '#c4952a');
 }
 
 function hideAddDestForm() {
@@ -3240,6 +3318,12 @@ function removeDestination(destId) {
   // Move linked financials to archived
   archiveFinancialsForDest(destId, dest?.name || destId);
 
+  // Hide booking links block for this destination
+  document.querySelectorAll(`[data-links-dest="${destId}"]`).forEach(el => el.style.display = 'none');
+
+  // Hide calendar rows for this destination
+  document.querySelectorAll(`[data-cal-dest="${destId}"]`).forEach(el => el.style.display = 'none');
+
   // If currently viewing this section, switch to first visible
   const activeSection = document.querySelector('.section.active');
   if (activeSection && activeSection.id === 'sec-' + destId) {
@@ -3275,6 +3359,12 @@ function restoreDestination(destId) {
     if (prev && prev.classList.contains('jline')) prev.style.display = '';
     else if (next && next.classList.contains('jline')) next.style.display = '';
   }
+
+  // Restore booking links block
+  document.querySelectorAll(`[data-links-dest="${destId}"]`).forEach(el => el.style.display = '');
+
+  // Restore calendar rows
+  document.querySelectorAll(`[data-cal-dest="${destId}"]`).forEach(el => el.style.display = '');
 
   // Move archived bookings back — find ones tagged with this dest
   const archived = document.getElementById('finArchivedBody');
@@ -3344,7 +3434,7 @@ function addDestination() {
   const name  = document.getElementById('tmNewName')?.value?.trim();
   const start = document.getElementById('tmNewStart')?.value || '';
   const end   = document.getElementById('tmNewEnd')?.value   || '';
-  const color = document.getElementById('tm-new-color')?.value || '#c4952a';
+  const color = document.getElementById('tmNewColor')?.value || '#c4952a';
   if (!name) { document.getElementById('tmNewName').focus(); return; }
 
   const id = 'dest-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g,'-');
@@ -3420,6 +3510,37 @@ function addDestination() {
     <button class="btn-add-booking" onclick="addBooking('${id}')">+ Add expense</button>`;
   if (finBreakdown) finSec.insertBefore(newGroup, finBreakdown.closest('.fin-section-title'));
 
+  // ── Add booking links placeholder in All Tickets ──
+  const ticketsSection = document.getElementById('sec-tickets');
+  if (ticketsSection) {
+    const linksBlock = document.createElement('div');
+    linksBlock.setAttribute('data-links-dest', id);
+    linksBlock.innerHTML = `
+      <div class="link-section-title">${icon} ${name}</div>
+      <div class="link-grid">
+        <div class="link-card lc" style="border-style:dashed;opacity:.75">
+          <div class="lc-cat" style="color:${color}">✏ Add your booking links</div>
+          <div class="lc-note" style="color:var(--muted);font-style:italic">Switch to Edit mode to customise links and notes for ${name}.</div>
+        </div>
+      </div>`;
+    const ornament = ticketsSection.querySelector('.ornament');
+    if (ornament) ticketsSection.insertBefore(linksBlock, ornament);
+    else ticketsSection.appendChild(linksBlock);
+  }
+
+  // ── Add calendar glance row if dates provided ──
+  const calOverviewCard = document.querySelector('#sec-calendar .day-card[data-cal-dest="all"]');
+  if (calOverviewCard && dates) {
+    const glanceEl = calOverviewCard.querySelector('.glance');
+    if (glanceEl) {
+      const row = document.createElement('div');
+      row.className = 'glance-row';
+      row.setAttribute('data-cal-dest', id);
+      row.innerHTML = `<span class="glance-time" style="color:${color}">${dates}</span><span class="glance-text"><strong>${icon} ${name}</strong> — Add your plans in the ${name} section.</span>`;
+      glanceEl.appendChild(row);
+    }
+  }
+
   // Inject add-note buttons for new cards
   injectAddNoteButtons();
 
@@ -3428,8 +3549,8 @@ function addDestination() {
   document.getElementById('tmNewIcon').value = '📍';
   document.getElementById('tmNewStart').value = '';
   document.getElementById('tmNewEnd').value = '';
-  document.getElementById('tm-new-color').value = '#c4952a';
-  renderSwatches('tmNewSwatches', 'tm-new-color', '#c4952a');
+  document.getElementById('tmNewColor').value = '#c4952a';
+  renderSwatches('tmNewSwatches', 'tmNewColor', '#c4952a');
 
   renderDestList();
   renderDaysList();
@@ -3597,7 +3718,33 @@ function addDayCard(dest) {
 
 // ── NEW TRIP / FULL RESET ──
 function startNewTrip() {
-  if (!confirm('Start a new trip?\n\nThis will clear ALL destinations, day cards, itinerary content, financials, and activities. The tool itself stays — you\'ll get a blank slate.\n\nSave a copy first if you want to keep this trip!\n\nContinue?')) return;
+  if (!confirm('Start a new trip?\n\nYour current trip will be automatically saved to Past Trips before wiping — you can restore it anytime.\n\nContinue?')) return;
+
+  // Archive current trip to localStorage first
+  archiveCurrentTrip();
+
+  // Clear booking links sections
+  document.querySelectorAll('[data-links-dest]').forEach(el => el.style.display = 'none');
+
+  // Clear calendar glance rows and overview card
+  const calSection = document.getElementById('sec-calendar');
+  if (calSection) {
+    calSection.querySelectorAll('[data-cal-dest]').forEach(el => el.style.display = 'none');
+  }
+
+  // Clear alert banners and flight boxes
+  document.querySelectorAll('.alert-banner, .flight-box').forEach(el => el.style.display = 'none');
+
+  // Clear booking priority checklist
+  document.querySelectorAll('[data-dest-block="all"]').forEach(el => el.style.display = 'none');
+
+  // Reset All Tickets intro text
+  const ticketsIntro = document.querySelector('#sec-tickets .section-intro');
+  if (ticketsIntro) ticketsIntro.textContent = 'Add destinations in ⚙ Manage Trip, then add activities from your day cards. Booking links for each destination will appear here automatically.';
+
+  // Reset Calendar intro
+  const calIntro = document.querySelector('#sec-calendar .section-intro');
+  if (calIntro) calIntro.textContent = 'Add destinations in ⚙ Manage Trip to build your calendar.';
 
   // 1. Remove all day/port cards
   document.querySelectorAll('.day-card, .port-card').forEach(c => c.remove());
@@ -3664,102 +3811,113 @@ function startNewTrip() {
 }
 
 
+// ══════════════════════════════════════════
+// PAST TRIPS — localStorage archive
+// ══════════════════════════════════════════
+
+const PT_KEY = 'travelPacketPastTrips';
+
+function ptLoad() {
+  try { return JSON.parse(localStorage.getItem(PT_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function ptSave(trips) {
+  try { localStorage.setItem(PT_KEY, JSON.stringify(trips)); }
+  catch(e) { alert('Could not save to browser storage — you may be in private browsing mode. Use Download instead.'); }
+}
+
+function archiveCurrentTrip(name) {
+  const trips = ptLoad();
+  const snapshot = {
+    id: Date.now(),
+    name: name || document.getElementById('tmTripName')?.value || 'Untitled Trip',
+    sub: document.getElementById('tmTripSub')?.value || '',
+    archivedAt: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
+    destinations: DESTINATIONS
+      .filter(d => {
+        const sec = document.getElementById('sec-' + d.id);
+        return sec && !sec.classList.contains('tm-hidden');
+      })
+      .map(d => d.icon + ' ' + d.name)
+      .join(', '),
+    html: '<!DOCTYPE html>\n' + document.documentElement.outerHTML,
+  };
+  trips.unshift(snapshot);
+  ptSave(trips);
+  renderPastTrips();
+}
+
+function renderPastTrips() {
+  const list = document.getElementById('ptList');
+  if (!list) return;
+  const trips = ptLoad();
+
+  if (!trips.length) {
+    list.innerHTML = '<div class="pt-empty">No past trips yet.<br>When you start a new trip, this one gets archived here automatically.</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  trips.forEach(trip => {
+    const card = document.createElement('div');
+    card.className = 'pt-card';
+    card.innerHTML = `
+      <div class="pt-card-name">${trip.name}</div>
+      <div class="pt-card-meta">Archived ${trip.archivedAt}</div>
+      ${trip.destinations ? `<div class="pt-card-dests">${trip.destinations}</div>` : ''}
+      ${trip.sub ? `<div class="pt-card-meta" style="font-style:italic;margin-bottom:.5rem">${trip.sub}</div>` : ''}
+      <div class="pt-card-actions">
+        <button class="pt-btn pt-btn-restore" onclick="ptRestore(${trip.id})">↩ Restore</button>
+        <button class="pt-btn pt-btn-download" onclick="ptDownload(${trip.id})">↓ Download</button>
+        <button class="pt-btn pt-btn-delete" onclick="ptDelete(${trip.id})">✕ Remove</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function ptRestore(id) {
+  if (!confirm('Restore this trip? Your current trip will be archived first so you won\'t lose it.\n\nContinue?')) return;
+  const trips = ptLoad();
+  const trip = trips.find(t => t.id === id);
+  if (!trip || !trip.html) { alert('Could not find that trip\'s data.'); return; }
+  archiveCurrentTrip();
+  document.open();
+  document.write(trip.html);
+  document.close();
+}
+
+function ptDownload(id) {
+  const trips = ptLoad();
+  const trip = trips.find(t => t.id === id);
+  if (!trip || !trip.html) { alert('Could not find that trip\'s data.'); return; }
+  const safeName = (trip.name || 'trip').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const blob = new Blob([trip.html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = safeName + '.html';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function ptDelete(id) {
+  if (!confirm('Permanently remove this past trip? This cannot be undone.')) return;
+  const trips = ptLoad().filter(t => t.id !== id);
+  ptSave(trips);
+  renderPastTrips();
+}
+
+function switchTMTab(tabId, btn) {
+  document.querySelectorAll('.tm-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tm-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tm-' + tabId).classList.add('active');
+  btn.classList.add('active');
+  if (tabId === 'pasttrips') renderPastTrips();
+}
+
+
 </script>
-
-<!-- ── TRIP MANAGER DRAWER ── -->
-<div class="tm-backdrop" id="tmBackdrop" onclick="closeTripManager()">
-  <div class="tm-drawer" onclick="event.stopPropagation()">
-    <div class="tm-drawer-header">
-      <span class="tm-drawer-title">⚙ Manage Trip</span>
-      <button class="tm-close" onclick="closeTripManager()">×</button>
-    </div>
-    <div class="tm-drawer-body">
-
-      <!-- Trip settings -->
-      <div class="tm-section-label">Trip name</div>
-      <input class="tm-input" id="tm-trip-name" placeholder="e.g. Europe Summer 2026">
-
-      <div class="tm-row">
-        <div>
-          <div class="tm-section-label">Start date</div>
-          <input type="date" class="tm-input" id="tm-start-date">
-        </div>
-        <div>
-          <div class="tm-section-label">End date</div>
-          <input type="date" class="tm-input" id="tm-end-date">
-        </div>
-      </div>
-
-      <div class="tm-row">
-        <div>
-          <div class="tm-section-label">Travelers</div>
-          <input type="number" class="tm-input" id="tm-travelers" min="1" max="20" placeholder="2">
-        </div>
-        <div>
-          <div class="tm-section-label">Home currency</div>
-          <select class="tm-input" id="tm-currency">
-            <option value="USD">USD — US Dollar</option>
-            <option value="EUR">EUR — Euro</option>
-            <option value="GBP">GBP — British Pound</option>
-            <option value="CAD">CAD — Canadian Dollar</option>
-            <option value="AUD">AUD — Australian Dollar</option>
-            <option value="JPY">JPY — Japanese Yen</option>
-          </select>
-        </div>
-      </div>
-      <button class="tm-btn-add" style="width:100%;margin-bottom:.25rem" onclick="saveTripSettings()">Save settings</button>
-
-      <!-- Destinations -->
-      <div class="tm-section-label" style="margin-top:1.5rem">Destinations</div>
-      <div class="tm-dest-list" id="tmDestList"></div>
-
-      <button class="btn-show-add-dest" onclick="showAddDestForm()">+ Add destination</button>
-
-      <!-- Add destination form (hidden by default) -->
-      <div class="tm-add-form" id="tmAddForm">
-        <div class="tm-section-label" style="margin-top:0">New destination</div>
-        <div class="tm-add-row">
-          <input class="tm-emoji-input" id="tm-new-emoji" value="📍" maxlength="2">
-          <input class="tm-input" id="tm-new-name" placeholder="City or place name" style="margin-bottom:0">
-        </div>
-        <div class="tm-row">
-          <div>
-            <div class="tm-section-label">From</div>
-            <input type="date" class="tm-input" id="tm-new-start">
-          </div>
-          <div>
-            <div class="tm-section-label">To</div>
-            <input type="date" class="tm-input" id="tm-new-end">
-          </div>
-        </div>
-        <div class="tm-section-label">Color</div>
-        <div class="tm-color-swatches" id="tmNewSwatches"></div>
-        <input type="hidden" id="tm-new-color" value="#c4952a">
-        <div class="tm-form-actions">
-          <button class="tm-btn-cancel" onclick="hideAddDestForm()">Cancel</button>
-          <button class="tm-btn-add" onclick="addDestination()">Add destination</button>
-        </div>
-      </div>
-
-      <!-- Archived destinations -->
-      <div id="tmArchivedDests" style="display:none">
-        <div class="tm-section-label" style="margin-top:1.5rem;color:var(--muted)">Removed destinations</div>
-        <div class="tm-dest-list" id="tmArchivedDestList"></div>
-      </div>
-
-      <!-- New Trip -->
-      <div style="margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-        <div class="tm-section-label" style="color:var(--terracotta);letter-spacing:.08em">Danger Zone</div>
-        <p style="font-size:11.5px;color:var(--muted);margin-bottom:.75rem;line-height:1.5">Wipes all destinations, itinerary content, financials, and activities — giving you a completely blank travel packet. Save a copy first if you want to keep this trip.</p>
-        <button onclick="startNewTrip()" style="width:100%;padding:9px 14px;font-size:12.5px;font-weight:500;font-family:'DM Sans',sans-serif;border:1.5px solid rgba(196,90,42,.45);border-radius:8px;background:transparent;color:var(--terracotta);cursor:pointer;transition:all .15s;letter-spacing:.02em"
-          onmouseover="this.style.background='rgba(196,90,42,.07)'" onmouseout="this.style.background='transparent'">
-          🗂 Start a New Trip
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
