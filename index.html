@@ -991,25 +991,6 @@ body.edit-mode [contenteditable]:focus {
 }
 .btn-show-add-dest:hover { background: rgba(196,149,42,.06); }
 
-/* Destination color swatches */
-.tm-color-swatches {
-  display: flex; flex-wrap: wrap; gap: 6px; margin-top: .4rem;
-}
-.tm-swatch {
-  width: 22px; height: 22px; border-radius: 50%;
-  cursor: pointer; border: 2px solid transparent;
-  transition: transform .12s, border-color .12s;
-  flex-shrink: 0;
-}
-.tm-swatch:hover { transform: scale(1.18); }
-.tm-swatch.selected { border-color: var(--ink); transform: scale(1.18); }
-.tm-dest-swatch {
-  width: 12px; height: 12px; border-radius: 50%;
-  flex-shrink: 0; cursor: pointer; border: 1.5px solid rgba(0,0,0,.15);
-  transition: transform .12s;
-}
-.tm-dest-swatch:hover { transform: scale(1.25); }
-
 /* Previously planned financials */
 .fin-archived-section {
   margin-top: 1.5rem;
@@ -1220,55 +1201,81 @@ body.edit-mode [contenteditable]:focus {
 
 .tm-hidden { display: none !important; }
 
-/* Past Trips tab */
-.pt-empty {
-  font-size: 13px; color: var(--muted); font-style: italic;
-  text-align: center; padding: 2rem 1rem;
+/* ── TICKETS TAB — UNIFIED LAYOUT ── */
+.tkt-dest-header {
+  display: flex; align-items: center; gap: 10px;
+  margin: 1.75rem 0 .6rem;
+  padding-bottom: .45rem;
+  border-bottom: 2px solid var(--border-strong);
 }
-.pt-notice {
-  font-size: 11px; color: var(--muted); line-height: 1.55;
-  background: rgba(196,149,42,.06); border: 1px solid rgba(196,149,42,.2);
-  border-radius: 8px; padding: .6rem .85rem; margin-bottom: 1rem;
-}
-.pt-card {
-  background: var(--warm-white); border: 1px solid var(--border);
-  border-radius: 10px; padding: .85rem 1rem; margin-bottom: .75rem;
-  box-shadow: var(--shadow); transition: box-shadow .15s;
-}
-.pt-card:hover { box-shadow: var(--shadow-lg); }
-.pt-card-name {
+.tkt-dest-icon { font-size: 20px; }
+.tkt-dest-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem; font-weight: 500; color: var(--ink); margin-bottom: 2px;
+  font-size: 1.2rem; font-weight: 500; color: var(--ink);
 }
-.pt-card-meta {
-  font-family: 'DM Mono', monospace; font-size: 10px;
-  color: var(--muted); margin-bottom: .5rem;
+.tkt-dest-dates {
+  font-family: 'DM Mono', monospace; font-size: 10.5px;
+  color: var(--muted); margin-left: 4px;
 }
-.pt-card-dests {
-  font-size: 11.5px; color: var(--muted); margin-bottom: .75rem;
-  line-height: 1.5;
+.tkt-sub-header {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em;
+  margin: .85rem 0 .45rem; padding: 4px 0;
 }
-.pt-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-.pt-btn {
-  padding: 5px 13px; border-radius: 6px; font-size: 11.5px;
-  font-weight: 500; cursor: pointer; border: 1px solid;
-  font-family: 'DM Sans', sans-serif; transition: all .15s;
+.tkt-sub-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
 }
-.pt-btn-restore {
-  color: var(--mediterranean); border-color: rgba(42,107,138,.35);
-  background: transparent;
+.tkt-sub-booked { color: var(--sage); }
+.tkt-sub-booked .tkt-sub-dot { background: var(--sage); }
+.tkt-sub-todo   { color: var(--mediterranean); }
+.tkt-sub-todo .tkt-sub-dot { background: var(--mediterranean); }
+.tkt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px; margin-bottom: .5rem;
 }
-.pt-btn-restore:hover { background: rgba(42,107,138,.07); }
-.pt-btn-download {
-  color: var(--sage); border-color: rgba(90,122,90,.35);
-  background: transparent;
+.tkt-act-card {
+  border-radius: 10px; padding: .75rem .9rem;
+  box-shadow: var(--shadow); transition: box-shadow .15s;
+  position: relative;
 }
-.pt-btn-download:hover { background: rgba(90,122,90,.07); }
-.pt-btn-delete {
-  color: rgba(196,90,42,.5); border-color: rgba(196,90,42,.2);
-  background: transparent; margin-left: auto;
+.tkt-act-booked {
+  background: rgba(90,122,90,.04);
+  border: 1.5px solid rgba(90,122,90,.25);
 }
-.pt-btn-delete:hover { color: var(--terracotta); border-color: var(--terracotta); background: rgba(196,90,42,.06); }
+.tkt-act-booked:hover { box-shadow: var(--shadow-lg); }
+.tkt-act-top { display: flex; gap: 9px; align-items: flex-start; }
+.tkt-act-type-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 4px;
+}
+.tkt-act-info { flex: 1; min-width: 0; }
+.tkt-act-name { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.3; }
+.tkt-act-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.tkt-act-meta span { margin-right: 7px; }
+.tkt-act-conf {
+  font-family: 'DM Mono', monospace; font-size: 10.5px;
+  color: var(--mediterranean); margin-top: 3px;
+}
+.tkt-act-cost {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  font-weight: 500; color: var(--gold); margin-top: 2px;
+}
+.tkt-act-notes {
+  font-size: 11px; color: var(--muted); font-style: italic; margin-top: 2px;
+}
+.tkt-act-actions {
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 5px; flex-shrink: 0;
+}
+.tkt-edit-btn {
+  background: none; border: none; font-size: 13px; color: var(--muted);
+  cursor: pointer; opacity: .45; transition: opacity .15s; padding: 2px 4px;
+  border-radius: 4px;
+}
+.tkt-edit-btn:hover { opacity: 1; }
+
 </style>
 </head>
 <body>
@@ -1284,7 +1291,6 @@ body.edit-mode [contenteditable]:focus {
       <button class="tm-tab active" onclick="switchTMTab('settings',this)">Trip Settings</button>
       <button class="tm-tab" onclick="switchTMTab('destinations',this)">Destinations</button>
       <button class="tm-tab" onclick="switchTMTab('days',this)">Day Cards</button>
-      <button class="tm-tab" onclick="switchTMTab('pasttrips',this)">Past Trips</button>
     </div>
     <div class="tm-body">
 
@@ -1292,20 +1298,20 @@ body.edit-mode [contenteditable]:focus {
       <div class="tm-tab-panel active" id="tm-settings">
         <div class="tm-field">
           <div class="tm-label">Trip name</div>
-          <input class="tm-input" id="tmTripName" value="A Summer in Europe" oninput="applyTripSettings()">
+          <input class="tm-input" id="tmTripName" value="My Trip" oninput="applyTripSettings()">
         </div>
         <div class="tm-field">
           <div class="tm-label">Tagline (shown in header)</div>
-          <input class="tm-input" id="tmTripSub" value="July 25 – August 12, 2026 · 18 nights · 4 countries · 7 cruise ports" oninput="applyTripSettings()">
+          <input class="tm-input" id="tmTripSub" value="" oninput="applyTripSettings()">
         </div>
         <div class="tm-row">
           <div class="tm-field">
             <div class="tm-label">Start date</div>
-            <input type="date" class="tm-input" id="tmStartDate" value="2026-07-25" oninput="applyTripSettings()">
+            <input type="date" class="tm-input" id="tmStartDate" value="" oninput="applyTripSettings()">
           </div>
           <div class="tm-field">
             <div class="tm-label">End date</div>
-            <input type="date" class="tm-input" id="tmEndDate" value="2026-08-12" oninput="applyTripSettings()">
+            <input type="date" class="tm-input" id="tmEndDate" value="" oninput="applyTripSettings()">
           </div>
         </div>
         <div class="tm-row">
@@ -1326,10 +1332,10 @@ body.edit-mode [contenteditable]:focus {
         </div>
         <div class="tm-field" style="margin-top:1.25rem">
           <div class="tm-label" style="color:var(--terracotta)">Danger zone</div>
-          <button class="tm-apply-btn" style="background:rgba(196,90,42,.85);margin-top:.25rem" onclick="startNewTrip()">
+          <button class="tm-apply-btn" style="background:rgba(196,90,42,.85);margin-top:.25rem" onclick="resetToBlankTrip()">
             Start fresh — clear all content
           </button>
-          <p style="font-size:11px;color:var(--muted);margin-top:.4rem">Archives this trip to Past Trips, then wipes everything for a fresh start.</p>
+          <p style="font-size:11px;color:var(--muted);margin-top:.4rem">Removes all day cards, port cards, and financials. Trip settings are kept. Use ↓ Save Copy first if you want to keep this trip.</p>
         </div>
       </div>
 
@@ -1359,11 +1365,6 @@ body.edit-mode [contenteditable]:focus {
               <input type="date" class="tm-input" id="tmNewEnd">
             </div>
           </div>
-          <div class="tm-field" style="margin:0 0 .5rem">
-            <div class="tm-label">Color</div>
-            <div class="tm-color-swatches" id="tmNewSwatches"></div>
-            <input type="hidden" id="tmNewColor" value="#c4952a">
-          </div>
           <button class="tm-save-dest" onclick="addDestination()">Add to trip</button>
         </div>
       </div>
@@ -1372,14 +1373,6 @@ body.edit-mode [contenteditable]:focus {
       <div class="tm-tab-panel" id="tm-days">
         <p style="font-size:12px;color:var(--muted);margin-bottom:.85rem">Remove day cards you don't need, or add blank ones to any destination.</p>
         <div id="tmDaysList"></div>
-      </div>
-
-      <!-- PAST TRIPS TAB -->
-      <div class="tm-tab-panel" id="tm-pasttrips">
-        <div class="pt-notice">
-          💾 Past trips are saved in this browser only. Use <strong>Download</strong> on any past trip for a permanent backup file you can open anywhere.
-        </div>
-        <div id="ptList"></div>
       </div>
 
     </div>
@@ -1391,40 +1384,33 @@ body.edit-mode [contenteditable]:focus {
 <!-- MASTHEAD -->
 <div class="masthead">
   <div class="masthead-inner">
-    <div class="masthead-eyebrow">Summer 2026 &nbsp;·&nbsp; Travel Packet</div>
-    <h1>A Summer in <em>Europe</em></h1>
+    <div class="masthead-eyebrow">Travel Packet</div>
+    <h1>My <em>Trip</em></h1>
     <div class="masthead-sub">July 25 – August 12, 2026 &nbsp;·&nbsp; 18 nights &nbsp;·&nbsp; 4 countries &nbsp;·&nbsp; 7 cruise ports</div>
-    <div class="route-pills">
-      <span class="rpill rpill-paris" data-dest-id="paris">Paris</span>
-      <span class="rpill rpill-ams" data-dest-id="amsterdam">Amsterdam World Pride</span>
-      <span class="rpill rpill-bcn" data-dest-id="barcelona">Barcelona</span>
-      <span class="rpill rpill-ship" data-dest-id="cruise">Brilliance of the Seas</span>
-      <span class="rpill rpill-ship" data-dest-id="cruise-ports">Toulon · Corsica · Rome · Naples · Sicily</span>
-      <span class="rpill rpill-venice" data-dest-id="venice">Venice</span>
-    </div>
+    <div class="route-pills"><span class="rpill" style="background:rgba(196,149,42,.15);color:var(--gold-light)">Define destinations in ⚙ Manage Trip</span></div>
   </div>
 </div>
 
 <!-- JOURNEY STRIP -->
 <div class="journey-strip">
   <div class="journey-inner">
-    <div class="jstop" data-jdest="paris"><div class="jdot jdot-paris"></div><div class="jlabel">Paris</div><div class="jdate">Jul 25–30</div></div>
+    <div class="jstop"><div class="jdot jdot-paris"></div><div class="jlabel">Paris</div><div class="jdate">Jul 26–30</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="amsterdam"><div class="jdot jdot-ams"></div><div class="jlabel">Amsterdam</div><div class="jdate">Jul 30–Aug 3</div></div>
+    <div class="jstop"><div class="jdot jdot-ams"></div><div class="jlabel">Amsterdam</div><div class="jdate">Jul 30–Aug 3</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="barcelona"><div class="jdot jdot-bcn"></div><div class="jlabel">Barcelona</div><div class="jdate">Aug 3</div></div>
+    <div class="jstop"><div class="jdot jdot-bcn"></div><div class="jlabel">Barcelona</div><div class="jdate">Aug 3</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="cruise"><div class="jdot jdot-ship"></div><div class="jlabel">Toulon</div><div class="jdate">Aug 4</div></div>
+    <div class="jstop"><div class="jdot jdot-ship"></div><div class="jlabel">Toulon</div><div class="jdate">Aug 4</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="cruise"><div class="jdot jdot-ship"></div><div class="jlabel">Corsica</div><div class="jdate">Aug 5</div></div>
+    <div class="jstop"><div class="jdot jdot-ship"></div><div class="jlabel">Corsica</div><div class="jdate">Aug 5</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="cruise"><div class="jdot jdot-ship"></div><div class="jlabel">Rome</div><div class="jdate">Aug 6</div></div>
+    <div class="jstop"><div class="jdot jdot-ship"></div><div class="jlabel">Rome</div><div class="jdate">Aug 6</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="cruise"><div class="jdot jdot-ship"></div><div class="jlabel">Naples</div><div class="jdate">Aug 7</div></div>
+    <div class="jstop"><div class="jdot jdot-ship"></div><div class="jlabel">Naples</div><div class="jdate">Aug 7</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="cruise"><div class="jdot jdot-ship"></div><div class="jlabel">Sicily</div><div class="jdate">Aug 8</div></div>
+    <div class="jstop"><div class="jdot jdot-ship"></div><div class="jlabel">Sicily</div><div class="jdate">Aug 8</div></div>
     <div class="jline"></div>
-    <div class="jstop" data-jdest="venice"><div class="jdot jdot-venice"></div><div class="jlabel">Venice</div><div class="jdate">Aug 10–12</div></div>
+    <div class="jstop"><div class="jdot jdot-venice"></div><div class="jlabel">Venice</div><div class="jdate">Aug 10–12</div></div>
   </div>
 </div>
 
@@ -1459,25 +1445,25 @@ body.edit-mode [contenteditable]:focus {
   <div class="alert-banner"><span>⚠</span><span><strong>Book immediately:</strong> Eiffel Tower tickets open 60 days before your visit (late May 2026) and sell out within hours. Louvre timed entry, Versailles, Notre Dame, and the Catacombs also require advance booking. Don't wait.</span></div>
 
   <div class="day-card">
-    <div class="day-header"><span class="day-badge badge-paris" data-activity-host="src-paris-1" data-source-id="src-paris-1">DAY 1 &nbsp;·&nbsp; SAT JUL 25</span><div><div class="day-title">Arrival &amp; First Evening</div><div class="day-subtitle">CDG arrival · settle in · Trocadéro at nightfall</div></div></div>
+    <div class="day-header"><span class="day-badge badge-paris" data-activity-host="src-paris-1" data-source-id="src-paris-1">DAY 1 &nbsp;·&nbsp; SAT JUL 25</span><div><div class="day-title">Overnight Flight — Orlando → Paris</div><div class="day-subtitle">Depart Orlando · arrive Paris CDG Sun Jul 26 at 7:25 AM</div></div></div>
     <ul class="timeline">
-      <li><span class="ttime">ARRIVE</span><span class="tcontent">Land at CDG. Take RER B direct to city center (~45 min, ~€12). At any metro station, buy a <strong>Navigo Découverte weekly pass</strong> (~€30 + €5 card) — unlimited metro, bus, and RER all week including CDG. Bring a passport photo.</span></li>
-      <li><span class="ttime">AFTERNOON</span><span class="tcontent">Check in. Rest. Decompress from the flight. Paris rewards the unhurried.</span></li>
-      <li><span class="ttime">6:30 PM</span><span class="tcontent">First Paris dinner on a terrace in St-Germain-des-Prés. Order whatever looks good. You're here.</span></li>
-      <li><span class="ttime">9:00 PM</span><span class="tcontent">Walk to Trocadéro. Watch the Eiffel Tower sparkle show — 20,000 bulbs, every hour after dark. Free, and one of the most romantic things Paris offers. Sets the tone perfectly.</span></li>
+      <li><span class="ttime">DEPART</span><span class="tcontent">Fly out of Orlando International (MCO) on Saturday July 25. Most transatlantic flights from Orlando connect through a hub — confirm your routing and layover. Pack light layers for the flight; overnight transatlantic cabins run cold.</span></li>
+      <li><span class="ttime">IN FLIGHT</span><span class="tcontent">Try to sleep — you land at 7:25 AM Paris time. The more rest you get now, the better your first full day will be. Download offline maps and your hotel confirmation before boarding in case of data issues on arrival.</span></li>
+      <li><span class="ttime">TIP</span><span class="tcontent">Set your watch to Paris time (Central European Summer Time, UTC+2) as soon as you board. Mentally commit to staying awake until at least 9 PM Paris time on arrival day — it's the single best way to beat jet lag.</span></li>
     </ul>
-    <div class="callout callout-info"><button class="callout-del" onclick="removeCallout(this)" title="Remove note">×</button><span class="callout-icon">ℹ</span><span>Hotels near the 7th, 8th, or 10th arrondissement work best. The 10th is closest to Gare du Nord for your July 30th morning train.</span></div>
+    <div class="callout callout-gold"><button class="callout-del" onclick="removeCallout(this)" title="Remove note">×</button><span class="callout-icon">★</span><span>Pack an eye mask, neck pillow, and noise-cancelling headphones or earplugs. Even a few hours of sleep on the overnight crossing makes a real difference when you land.</span></div>
   </div>
 
   <div class="day-card">
-    <div class="day-header"><span class="day-badge badge-paris" data-activity-host="src-paris-2" data-source-id="src-paris-2">DAY 2 &nbsp;·&nbsp; SUN JUL 26</span><div><div class="day-title">Eiffel Tower Summit + Musée d'Orsay + Seine Cruise</div></div></div>
+    <div class="day-header"><span class="day-badge badge-paris" data-activity-host="src-paris-2" data-source-id="src-paris-2">DAY 2 &nbsp;·&nbsp; SUN JUL 26</span><div><div class="day-title">Arrival Morning + First Paris Day</div><div class="day-subtitle">Land 7:25 AM · settle in · Eiffel Tower · Musée d'Orsay · Seine cruise</div></div></div>
     <ul class="timeline">
-      <li><span class="ttime">9:00 AM</span><span class="tcontent"><strong>Eiffel Tower summit</strong> — pre-booked timed entry. Allow 1.5–2 hours. The view from the top at 9 AM with light still low over the city is extraordinary. Book at toureiffel.paris.</span></li>
-      <li><span class="ttime">11:30 AM</span><span class="tcontent">Walk the Champ de Mars. Coffee and a croissant from any nearby boulangerie.</span></li>
-      <li><span class="ttime">1:30 PM</span><span class="tcontent">Lunch in the 7th — Rue Cler market street is ideal for a relaxed, affordable, very Parisian spread.</span></li>
+      <li><span class="ttime">7:25 AM</span><span class="tcontent"><strong>Land at Paris CDG.</strong> Follow signs to RER B — it runs directly from Terminal 2 and takes ~45 min to city center (~€12). At any metro station buy a <strong>Navigo Découverte weekly pass</strong> (~€30 + €5 card) — covers all metro, bus, and RER including CDG all week. Bring a passport photo for the card.</span></li>
+      <li><span class="ttime">9:30 AM</span><span class="tcontent">Check in or drop bags at hotel. Freshen up. Coffee and a croissant at the nearest boulangerie — your first real one. Take 30 minutes before doing anything else.</span></li>
+      <li><span class="ttime">11:00 AM</span><span class="tcontent"><strong>Eiffel Tower summit</strong> — pre-booked timed entry. The view from the top mid-morning with clear light over the city is extraordinary. Book at toureiffel.paris (opens ~60 days ahead). Allow 1.5–2 hours.</span></li>
+      <li><span class="ttime">1:00 PM</span><span class="tcontent">Walk the Champ de Mars. Lunch in the 7th — Rue Cler market street is ideal for a relaxed, affordable, very Parisian spread.</span></li>
       <li><span class="ttime">3:00 PM</span><span class="tcontent"><strong>Musée d'Orsay</strong> — the world's greatest Impressionist collection. Monet, Renoir, Van Gogh, Degas, all in a converted railway station. Pre-book at musee-orsay.fr. Allow 2 hours. Closed Mondays.</span></li>
       <li><span class="ttime">6:30 PM</span><span class="tcontent"><strong>Seine River cruise at sunset</strong> — 1 hour past Notre Dame, the Louvre, Pont Alexandre III, and the Eiffel Tower glowing as dusk falls. Book at bateauxparisiens.com.</span></li>
-      <li><span class="ttime">8:30 PM</span><span class="tcontent">Dinner in St-Germain. Book a table in advance — Paris in July is packed.</span></li>
+      <li><span class="ttime">8:30 PM</span><span class="tcontent">Dinner in St-Germain. Book a table in advance — Paris in July is packed. Push through to at least 9–10 PM before sleeping. First night jet lag management starts now.</span></li>
     </ul>
   </div>
 
@@ -1529,7 +1515,7 @@ body.edit-mode [contenteditable]:focus {
 
   <div class="flight-box">
     <div class="fb-inner">
-      <div class="fb-airline">Eurostar (formerly Thalys) · High-speed train</div>
+      <div class="fb-airline">Eurostar (formerly Thalys) · High-speed train · Already booked ✓</div>
       <div class="fb-route">Paris Gare du Nord → Amsterdam Centraal</div>
       <div class="fb-times">10:55 AM <span class="fb-sep">→</span> 2:20 PM</div>
       <div class="fb-meta">Thursday July 30 &nbsp;·&nbsp; ~3 hrs 25 min &nbsp;·&nbsp; Direct &nbsp;·&nbsp; No check-in required — arrive 20 min before departure</div>
@@ -1764,6 +1750,12 @@ body.edit-mode [contenteditable]:focus {
         <div class="exc-desc">Half-day excursion to the dramatic red granite cliff formations along the west coast — a UNESCO World Heritage site with jaw-dropping scenery unlike anything else on this cruise.</div>
         <a href="https://www.royalcaribbean.com/shore-excursions/port/aja/ajaccio-corsica" target="_blank" class="exc-link">Book at royalcaribbean.com →</a>
       </div>
+      <div class="exc-block" style="border-color:rgba(42,107,138,.3);background:rgba(42,107,138,.04)">
+        <div class="exc-label" style="color:var(--mediterranean)">RC Shore Excursion — Booked ✓</div>
+        <div class="exc-title">Catamaran Cruise</div>
+        <div class="exc-desc">3-hour Royal Caribbean catamaran excursion from Ajaccio — sailing the stunning Corsican coastline with views of the maquis-covered hills. Conf: 2822191 · $508 total.</div>
+        <a href="https://www.royalcaribbean.com/shore-excursions/port/aja/ajaccio-corsica" target="_blank" class="exc-link">royalcaribbean.com → My Cruises →</a>
+      </div>
     </div>
   </div>
 
@@ -1924,122 +1916,41 @@ body.edit-mode [contenteditable]:focus {
   <!-- Dynamic activities (populated by JS) -->
   <div id="act-tickets-dynamic"></div>
 
-  <div class="ornament" style="margin:1.5rem 0 .75rem">· · ·</div>
-  <div class="section-h" style="font-size:1.2rem;margin-bottom:.75rem">Booking Links &amp; Resources</div>
-  <p class="section-intro" style="margin-bottom:1rem">Quick-access links for everything you still need to book.</p>
-
-  <div data-links-dest="paris">
-  <div class="link-section-title">Paris</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat urgent">⚠ Book when tickets open (late May)</div><a href="https://www.toureiffel.paris/en/the-monument/practical-information" target="_blank">Eiffel Tower — toureiffel.paris</a><div class="lc-note">Opens 60 days ahead. Summit sells out first. Set a reminder.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book 3–4 weeks ahead</div><a href="https://www.louvre.fr/en/visit-the-louvre" target="_blank">Louvre Museum — louvre.fr</a><div class="lc-note">Timed entry required. Closed Tuesdays.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://www.musee-orsay.fr/en/visit/practical-information" target="_blank">Musée d'Orsay — musee-orsay.fr</a><div class="lc-note">Pre-book recommended. Closed Mondays. Late nights Thursdays.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://en.chateauversailles.fr/plan-your-visit" target="_blank">Palace of Versailles — chateauversailles.fr</a><div class="lc-note">Palace + Gardens access. Go early — busiest site in France.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Free — timed reservation required</div><a href="https://www.notredamedeparis.fr/en/visit/practical-informations/" target="_blank">Notre Dame Cathedral — notredamedeparis.fr</a><div class="lc-note">Free entry but online timed reservation required.</div></div>
-    <div class="link-card lc"><div class="lc-cat urgent">⚠ Skip-the-line essential</div><a href="https://www.catacombes.paris.fr/en" target="_blank">Paris Catacombs — catacombes.paris.fr</a><div class="lc-note">2+ hour walk-up waits in summer. Do not go without a skip-the-line ticket.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://www.paris-arc-de-triomphe.fr/en" target="_blank">Arc de Triomphe — paris-arc-de-triomphe.fr</a><div class="lc-note">Rooftop entry. Book ahead.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://www.sainte-chapelle.fr/en" target="_blank">Sainte-Chapelle — sainte-chapelle.fr</a><div class="lc-note">Covered by Paris Museum Pass.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Covers 55+ sites</div><a href="https://www.parismuseumpass.com/en" target="_blank">Paris Museum Pass — parismuseumpass.com</a><div class="lc-note">4-day pass. Does NOT include Eiffel Tower or Catacombs.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Evening departure</div><a href="https://www.bateauxparisiens.com/en.html" target="_blank">Seine River Cruise — bateauxparisiens.com</a><div class="lc-note">1-hour cruise. Book sunset departure.</div></div>
-  </div>
-
-  </div>
-
-  <div data-links-dest="amsterdam">
-  <div class="link-section-title">Amsterdam</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat urgent">⚠ Book today — hardest ticket on the trip</div><a href="https://www.annefrank.org/en/museum/tickets/" target="_blank">Anne Frank House — annefrank.org</a><div class="lc-note">Sells out months ahead, especially during WorldPride week.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book 2–4 weeks ahead</div><a href="https://www.rijksmuseum.nl/en/plan-your-visit" target="_blank">Rijksmuseum — rijksmuseum.nl</a><div class="lc-note">Timed entry. Pride week demand is enormous.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://www.vangoghmuseum.nl/en/visit/tickets-and-opening-hours" target="_blank">Van Gogh Museum — vangoghmuseum.nl</a><div class="lc-note">Sells out. Timed entry required.</div></div>
-    <div class="link-card lc"><div class="lc-cat">WorldPride 2026</div><a href="https://pride.amsterdam/en/" target="_blank">Canal Parade &amp; Events — pride.amsterdam</a><div class="lc-note">Boat viewing spots, event schedule, street party map.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book departure time</div><a href="https://www.lovers.nl/en/" target="_blank">Canal Boat Cruise — lovers.nl</a><div class="lc-note">Multiple routes. Book in advance during Pride week.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book timed entry</div><a href="https://www.heineken-experience.com/en/tickets" target="_blank">Heineken Experience — heineken-experience.com</a><div class="lc-note">Fun brewery tour. Optional but enjoyable.</div></div>
-  </div>
-
-  </div>
-
-  <div data-links-dest="barcelona">
-  <div class="link-section-title">Barcelona</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat urgent">⚠ Book morning slot for Aug 3</div><a href="https://www.sagradafamilia.org/en/tickets" target="_blank">Sagrada Família — sagradafamilia.org</a><div class="lc-note">Timed entry required. Often sold out weeks ahead in August.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Complete before Amsterdam</div><a href="https://www.royalcaribbean.com/booked/cruise-planner" target="_blank">RC Online Check-In — royalcaribbean.com</a><div class="lc-note">Upload passport photo, add emergency contact + credit card. Saves 30 min at the terminal.</div></div>
-  </div>
-
-  </div>
-
-  <div data-links-dest="cruise">
-  <div class="link-section-title">Rome — Train from Civitavecchia</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat">Buy before the port day</div><a href="https://www.trenitalia.com/en.html" target="_blank">Trenitalia — trenitalia.com</a><div class="lc-note">Civitavecchia → Roma San Pietro ~€5. Validate before boarding.</div></div>
-    <div class="link-card lc"><div class="lc-cat">RC excursions</div><a href="https://www.royalcaribbean.com/shore-excursions/port/civ/rome-civitavecchia-italy" target="_blank">Rome Shore Excursions — royalcaribbean.com</a><div class="lc-note">Vatican + Rome combos if you want guide + guaranteed transport back.</div></div>
-  </div>
-
-  <div class="link-section-title">Naples — Pompeii</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat urgent">⚠ Personalized tickets — book with ID</div><a href="https://ticketing.pompeii.beniculturali.it" target="_blank">Pompeii Tickets — pompeii.beniculturali.it</a><div class="lc-note">Now limited to 20,000/day. Non-transferable — must match ID at entry.</div></div>
-    <div class="link-card lc"><div class="lc-cat">RC excursions</div><a href="https://www.royalcaribbean.com/shore-excursions/port/nap/naples-italy" target="_blank">Naples Shore Excursions — royalcaribbean.com</a><div class="lc-note">Pompeii + Herculaneum, Amalfi Coast, private options.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Third-party tours</div><a href="https://www.viator.com/Pompeii-tours/Port-Transfers/d24336-g24-c4032" target="_blank">Pompeii Port Tours — viator.com</a><div class="lc-note">Port-pickup tours, smaller groups, often cheaper than cruise line.</div></div>
-  </div>
-
-  <div class="link-section-title">Sicily — Taormina</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat">RC excursions</div><a href="https://www.royalcaribbean.com/shore-excursions/port/reg/sicily-italy" target="_blank">Sicily Shore Excursions — royalcaribbean.com</a><div class="lc-note">Taormina tours, Mount Etna excursions, Messina walking tours.</div></div>
-    <div class="link-card lc"><div class="lc-cat">DIY public bus</div><a href="https://www.interbus.it/en/timetable" target="_blank">Interbus Messina–Taormina — interbus.it</a><div class="lc-note">~€5 each way, ~45 min. Check return times before you go.</div></div>
-  </div>
-
-  <div class="link-section-title">Post-Cruise: Ravenna → Venice</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat urgent">⚠ Book at Guest Services on Day 1 of cruise</div><a href="https://www.royalcaribbeanblog.com/2024/02/12/venice-to-ravenna-cruise-port" target="_blank">RC Shuttle Guide — royalcaribbeanblog.com</a><div class="lc-note">~$58/person to Venice Piazzale Roma. Fills fast.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Private transfer option</div><a href="https://www.viator.com/Ravenna-tours/Port-Transfers/d4236-g15-c112" target="_blank">Ravenna → Venice Private Transfer — viator.com</a><div class="lc-note">Pre-book private car. ~€120–160 for a group, ~2.5 hrs.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Specialist service</div><a href="https://pantareichauffeurservice.rezgo.com/details/300657/private-transfer-brilliance-of-the-seas-ravenna-cruise-terminal-to-venice" target="_blank">Pantarei Chauffeur — pantareichauffeurservice.it</a><div class="lc-note">Specialist RC Brilliance transfer, Ravenna to Venice.</div></div>
-  </div>
-
-  </div>
-
-  <div data-links-dest="venice">
-  <div class="link-section-title">Venice</div>
-  <div class="link-grid">
-    <div class="link-card lc"><div class="lc-cat">Book timed entry</div><a href="https://palazzoducale.visitmuve.it/en/plan-your-visit/tickets/" target="_blank">Doge's Palace — visitmuve.it</a><div class="lc-note">Combo with St. Mark's Basilica available.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Free — timed slot</div><a href="https://www.prenotazionib.venetonet.it/" target="_blank">St. Mark's Basilica — venetonet.it</a><div class="lc-note">Free entry. Book timed slot to skip the queue.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Book in advance</div><a href="https://www.gallerieaccademia.it/en/visit-us" target="_blank">Gallerie dell'Accademia — gallerieaccademia.it</a><div class="lc-note">Venetian painting masterworks.</div></div>
-    <div class="link-card lc"><div class="lc-cat">Get on arrival</div><a href="https://actv.avmspa.it/en/content/tickets-and-passes" target="_blank">Vaporetto Pass — actv.avmspa.it</a><div class="lc-note">48 or 72-hr unlimited pass. Buy at Piazzale Roma or Santa Lucia station.</div></div>
-  </div>
-  </div>
-</div>
+  
 
 <!-- ═══════════════ CALENDAR ═══════════════ -->
 <div class="section" id="sec-calendar">
   <div class="section-h">Full Calendar &nbsp;<span>·</span>&nbsp; July 25 – August 12</div>
   <p class="section-intro">Every day of the trip at a glance — from Paris arrival to Venice departure. Use this as your master reference for dates and sequencing.</p>
 
-  <div class="day-card" data-cal-dest="all">
+  <div class="day-card">
     <div class="day-header"><div class="day-title">Day-by-Day Overview</div></div>
     <div class="glance">
-      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Sat Jul 25</span><span class="glance-text">Fly into Paris CDG. Settle in. Trocadéro at nightfall for the Eiffel Tower sparkle show.</span></div>
-      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Sun Jul 26</span><span class="glance-text">Paris: Eiffel Tower summit · Musée d'Orsay · Seine River cruise at sunset.</span></div>
-      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Mon Jul 27</span><span class="glance-text">Paris: Louvre · Notre Dame · Sainte-Chapelle · Marais district · L'As du Fallafel.</span></div>
-      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Tue Jul 28</span><span class="glance-text">Paris: Versailles day trip — Hall of Mirrors · Grand Canal rowboat · Trianon palaces. Montmartre dinner.</span></div>
-      <div class="glance-row" data-cal-dest="paris"><span class="glance-time" style="color:var(--terracotta)">Wed Jul 29</span><span class="glance-text">Paris: Catacombs · Arc de Triomphe · Champs-Élysées · Farewell Paris dinner. Pack for train tomorrow.</span></div>
-      <div class="glance-row glance-highlight" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Thu Jul 30</span><span class="glance-text"><strong>TRAIN:</strong> Gare du Nord 10:55 AM → Amsterdam Centraal 2:20 PM. Arrive Amsterdam. Jordaan walk. WorldPride warm-up evening.</span></div>
-      <div class="glance-row" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Fri Jul 31</span><span class="glance-text">Amsterdam: Anne Frank House · Nine Streets · Rijksmuseum · WorldPride Street Parties begin.</span></div>
-      <div class="glance-row glance-highlight" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Sat Aug 1 ★</span><span class="glance-text"><strong>WorldPride CANAL PARADE</strong> — claim your spot early, starts ~1 PM. The crown jewel of the trip.</span></div>
-      <div class="glance-row" data-cal-dest="amsterdam"><span class="glance-time" style="color:#a07820">Sun Aug 2</span><span class="glance-text">Amsterdam: Rest day. Optional Van Gogh Museum. Early dinner. In bed by 9 PM. Alarms set for 4:15 AM.</span></div>
-      <div class="glance-row glance-highlight" data-cal-dest="barcelona"><span class="glance-time" style="color:var(--sage)">Mon Aug 3</span><span class="glance-text"><strong>FLIGHT</strong> AMS 7:00 AM → BCN 9:15 AM. Airport → Port (drop bags) → Sagrada Família → tapas lunch → board. <strong>ALL ABOARD 4:30 PM · SHIP DEPARTS 5:00 PM.</strong></span></div>
-      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Tue Aug 4</span><span class="glance-text">CRUISE: Toulon, France · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Old Town · Mont Faron cable car · Aix-en-Provence excursion.</span></div>
-      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Wed Aug 5</span><span class="glance-text">CRUISE: Ajaccio, Corsica · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Maison Bonaparte · Little Train · Calanques de Piana.</span></div>
-      <div class="glance-row glance-highlight" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Thu Aug 6</span><span class="glance-text">CRUISE: Rome/Civitavecchia · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Train to Roma San Pietro · <strong>Vatican tour ✓</strong> · Trevi Fountain · Return by 6:15 PM.</span></div>
-      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Fri Aug 7</span><span class="glance-text">CRUISE: Naples · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Pompeii ruins (recommended) or Amalfi Coast. Back aboard by 6:15 PM.</span></div>
-      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Sat Aug 8</span><span class="glance-text">CRUISE: Messina, Sicily · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Cathedral clock at noon · Taormina (leave by 2:30 PM to make all-aboard).</span></div>
-      <div class="glance-row" data-cal-dest="cruise"><span class="glance-time" style="color:var(--mediterranean)">Sun Aug 9</span><span class="glance-text">CRUISE: Day at Sea · Pool · Spa · Specialty dinner · Set out luggage · Confirm Venice shuttle.</span></div>
-      <div class="glance-row glance-highlight" data-cal-dest="venice"><span class="glance-time" style="color:#7846a0">Mon Aug 10</span><span class="glance-text"><strong>DISEMBARK</strong> Ravenna ~7 AM · Transfer to Venice (~2.5 hrs) · St. Mark's · Doge's Palace · Sunset gondola.</span></div>
-      <div class="glance-row" data-cal-dest="venice"><span class="glance-time" style="color:#7846a0">Tue Aug 11</span><span class="glance-text">Venice: Rialto market (early) · Accademia gallery · Murano glass island · Burano · Final dinner.</span></div>
-      <div class="glance-row" data-cal-dest="venice"><span class="glance-time" style="color:#7846a0">Wed Aug 12</span><span class="glance-text">Venice: Final espresso · Last gifts · Vaporetto or water taxi to Marco Polo Airport. <em>Arrivederci.</em></span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Sat Jul 25</span><span class="glance-text">Overnight flight departs Orlando (MCO). Land Paris CDG Sunday Jul 26 at 7:25 AM.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Sun Jul 26</span><span class="glance-text"><strong>ARRIVE 7:25 AM CDG.</strong> RER B to city. Hotel drop. Eiffel Tower · Musée d'Orsay · Seine River cruise at sunset.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Mon Jul 27</span><span class="glance-text">Paris: Louvre · Notre Dame · Sainte-Chapelle · Marais district · L'As du Fallafel.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Tue Jul 28</span><span class="glance-text">Paris: Versailles day trip — Hall of Mirrors · Grand Canal rowboat · Trianon palaces. Montmartre dinner.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--terracotta)">Wed Jul 29</span><span class="glance-text">Paris: Catacombs · Arc de Triomphe · Champs-Élysées · Farewell Paris dinner. Pack for train tomorrow.</span></div>
+      <div class="glance-row glance-highlight"><span class="glance-time" style="color:#a07820">Thu Jul 30</span><span class="glance-text"><strong>TRAIN:</strong> Gare du Nord 10:55 AM → Amsterdam Centraal 2:20 PM. Arrive Amsterdam. Jordaan walk. WorldPride warm-up evening.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:#a07820">Fri Jul 31</span><span class="glance-text">Amsterdam: Anne Frank House · Nine Streets · Rijksmuseum · WorldPride Street Parties begin.</span></div>
+      <div class="glance-row glance-highlight"><span class="glance-time" style="color:#a07820">Sat Aug 1 ★</span><span class="glance-text"><strong>WorldPride CANAL PARADE</strong> — claim your spot early, starts ~1 PM. The crown jewel of the trip.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:#a07820">Sun Aug 2</span><span class="glance-text">Amsterdam: Rest day. Optional Van Gogh Museum. Early dinner. In bed by 9 PM. Alarms set for 4:15 AM.</span></div>
+      <div class="glance-row glance-highlight"><span class="glance-time" style="color:var(--sage)">Mon Aug 3</span><span class="glance-text"><strong>FLIGHT</strong> AMS 7:00 AM → BCN 9:15 AM. Airport → Port (drop bags) → Sagrada Família → tapas lunch → board. <strong>ALL ABOARD 4:30 PM · SHIP DEPARTS 5:00 PM.</strong></span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Tue Aug 4</span><span class="glance-text">CRUISE: Toulon, France · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Old Town · Mont Faron cable car · Aix-en-Provence excursion.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Wed Aug 5</span><span class="glance-text">CRUISE: Ajaccio, Corsica · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Maison Bonaparte · Little Train · Calanques de Piana.</span></div>
+      <div class="glance-row glance-highlight"><span class="glance-time" style="color:var(--mediterranean)">Thu Aug 6</span><span class="glance-text">CRUISE: Rome/Civitavecchia · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Train to Roma San Pietro · <strong>Vatican tour ✓</strong> · Trevi Fountain · Return by 6:15 PM.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Fri Aug 7</span><span class="glance-text">CRUISE: Naples · Gangway 7:30 AM – All aboard <strong>6:30 PM</strong> · Pompeii ruins (recommended) or Amalfi Coast. Back aboard by 6:15 PM.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Sat Aug 8</span><span class="glance-text">CRUISE: Messina, Sicily · Gangway 8:30 AM – All aboard <strong>4:30 PM</strong> · Cathedral clock at noon · Taormina (leave by 2:30 PM to make all-aboard).</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:var(--mediterranean)">Sun Aug 9</span><span class="glance-text">CRUISE: Day at Sea · Pool · Spa · Specialty dinner · Set out luggage · Confirm Venice shuttle.</span></div>
+      <div class="glance-row glance-highlight"><span class="glance-time" style="color:#7846a0">Mon Aug 10</span><span class="glance-text"><strong>DISEMBARK</strong> Ravenna ~7 AM · Transfer to Venice (~2.5 hrs) · St. Mark's · Doge's Palace · Sunset gondola.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:#7846a0">Tue Aug 11</span><span class="glance-text">Venice: Rialto market (early) · Accademia gallery · Murano glass island · Burano · Final dinner.</span></div>
+      <div class="glance-row"><span class="glance-time" style="color:#7846a0">Wed Aug 12</span><span class="glance-text">Venice: Final espresso · Last gifts · Vaporetto or water taxi to Marco Polo Airport. <em>Arrivederci.</em></span></div>
     </div>
   </div>
 
   <div class="ornament">· · ·</div>
 
-  <div class="day-card" data-dest-block="all">
+  <div class="day-card">
     <div class="day-header"><div class="day-title">Booking Priority Order — Do These First</div></div>
     <ul class="checklist">
       <li><span class="ci-num">01</span><span><strong>Anne Frank House (Amsterdam)</strong> — annefrank.org. Book today. Nothing else on this trip sells out faster.</span></li>
@@ -2056,7 +1967,7 @@ body.edit-mode [contenteditable]:focus {
       <li><span class="ci-num">12</span><span><strong>Ravenna → Venice transfer</strong> — Also book at Guest Services on Day 1 of the cruise. ~$58/person RC shuttle to Venice Piazzale Roma.</span></li>
       <li><span class="ci-num">13</span><span><strong>RC online check-in</strong> — royalcaribbean.com → My Cruises. Upload passport photo + credit card before you leave for Amsterdam. 10 minutes. Saves 30 at the terminal.</span></li>
       <li><span class="ci-num">14</span><span><strong>Travel insurance</strong> — Essential for a trip this complex: 4 countries, multiple flights, a cruise, and layered connections. Get it before you're too close to departure.</span></li>
-      <li><span class="ci-num">15</span><span><strong>Add luggage to Vueling flight (AMS → BCN)</strong> — vueling.com. Basic fare only covers a tiny personal item. Add cabin bag and/or checked luggage now — far cheaper online than at the airport.</span></li>
+      <li><span class="ci-num">15</span><span><strong>Add luggage to Vueling booking</strong> — vueling.com. Basic fare only covers a tiny personal item. Add cabin bag and/or checked luggage now — far cheaper online than at the airport.</span></li>
     </ul>
   </div>
 </div>
@@ -2170,7 +2081,7 @@ body.edit-mode [contenteditable]:focus {
 
 <!-- FOOTER -->
 <div class="page-footer">
-  Europe 2026 &nbsp;·&nbsp; Paris &nbsp;·&nbsp; Amsterdam WorldPride &nbsp;·&nbsp; Barcelona &nbsp;·&nbsp; Brilliance of the Seas &nbsp;·&nbsp; Venice &nbsp;·&nbsp; July 25 – August 12
+  My Trip &nbsp;·&nbsp; Travel Packet Template
 </div>
 
 <script>
@@ -2443,49 +2354,7 @@ function recalcAll() {
 
 // ── SEED DEFAULT BOOKINGS ──
 function seedBookings() {
-  const seed = [
-    { group:'transport', name:'Inbound flights to Paris', currency:'USD', status:'sp-tbd', payments:[] },
-    { group:'transport', name:'Eurostar: Paris → Amsterdam (Jul 30)', currency:'USD', notes:'Paris Gare du Nord → Amsterdam Centraal · Direct · ~3 hrs 25 min', status:'sp-tbd', payments:[] },
-    { group:'transport', name:'Vueling: AMS → BCN (Aug 3, 7:00 AM)', currency:'EUR', status:'sp-tbd', payments:[] },
-    { group:'transport', name:'Royal Caribbean Cruise (Aug 3–10)', currency:'USD', notes:'Brilliance of the Seas · 7 nights · Barcelona → Ravenna', status:'sp-tbd', payments:[] },
-    { group:'transport', name:'Barcelona airport → cruise port (taxi, Aug 3)', due:'42', currency:'EUR', notes:'~€40–45 fixed rate, pay on day', status:'sp-notbooked', payments:[] },
-    { group:'transport', name:'Civitavecchia → Roma San Pietro train (Aug 6)', due:'10', currency:'EUR', notes:'2x ~€5 each way, book at trenitalia.com', status:'sp-notbooked', payments:[] },
-    { group:'transport', name:'RC Shuttle: Ravenna → Venice (Aug 10)', due:'116', currency:'USD', notes:'~$58/person × 2, book at Guest Services Day 1', status:'sp-notbooked', payments:[] },
-    { group:'transport', name:'Home flights from Venice', currency:'USD', status:'sp-tbd', payments:[] },
-    { group:'hotels',    name:'Paris hotel (Jul 25–30, 5 nights)', currency:'USD', status:'sp-tbd', payments:[] },
-    { group:'hotels',    name:'Amsterdam hotel (Jul 30–Aug 3, 4 nights)', currency:'EUR', notes:'WorldPride week — book ASAP', status:'sp-tbd', payments:[] },
-    { group:'hotels',    name:'Venice hotel (Aug 10–12, 2 nights)', currency:'EUR', status:'sp-tbd', payments:[] },
-    { group:'tickets',   name:'Eiffel Tower — summit (Jul 26)', currency:'EUR', notes:'Opens 60 days ahead (~late May) — set a reminder!', status:'sp-tbd', payments:[] },
-    { group:'tickets',   name:"Musée d'Orsay (Jul 26)", currency:'EUR', notes:'musee-orsay.fr', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Louvre Museum (Jul 27)', currency:'EUR', notes:'louvre.fr', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Notre Dame Cathedral (Jul 27)', due:'0', currency:'EUR', notes:'Free — timed reservation required at notredamedeparis.fr', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Sainte-Chapelle (Jul 27)', currency:'EUR', notes:'sainte-chapelle.fr', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Palace of Versailles (Jul 28)', currency:'EUR', notes:'chateauversailles.fr', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Paris Catacombs — skip-the-line (Jul 29)', currency:'EUR', notes:'catacombes.paris.fr — skip-the-line essential', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Arc de Triomphe (Jul 29)', currency:'EUR', notes:'paris-arc-de-triomphe.fr', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Seine River Cruise (Jul 26 evening)', currency:'EUR', notes:'bateauxparisiens.com', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Anne Frank House ⚠ (Jul 31)', currency:'EUR', notes:'annefrank.org — BOOK TODAY, sells out months ahead', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Rijksmuseum (Jul 31)', currency:'EUR', notes:'rijksmuseum.nl', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Van Gogh Museum (Aug 2)', currency:'EUR', notes:'vangoghmuseum.nl', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'WorldPride Canal Parade boat spot (Aug 1)', currency:'EUR', notes:'pride.amsterdam — premium spots sell out months ahead', status:'sp-tbd', payments:[] },
-    { group:'tickets',   name:'Sagrada Família — morning entry (Aug 3)', currency:'EUR', notes:'sagradafamilia.org — book now', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Vatican Tour (Aug 6)', currency:'EUR', notes:'Book at museivaticani.va', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:'Pompeii entrance ×2 (Aug 7)', due:'36', currency:'EUR', notes:'~€18/person · must match ID · pompeii.beniculturali.it', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:"Doge's Palace, Venice (Aug 10)", currency:'EUR', notes:'visitmuve.it', status:'sp-notbooked', payments:[] },
-    { group:'tickets',   name:"Gallerie dell'Accademia, Venice (Aug 11)", currency:'EUR', notes:'gallerieaccademia.it', status:'sp-notbooked', payments:[] },
-    { group:'excursions',name:'Toulon excursion (Aug 4)', currency:'USD', notes:'royalcaribbean.com → My Cruises', status:'sp-notbooked', payments:[] },
-    { group:'excursions',name:'Corsica excursion (Aug 5)', currency:'USD', notes:'royalcaribbean.com → My Cruises', status:'sp-notbooked', payments:[] },
-    { group:'excursions',name:'Naples excursion (Aug 7)', currency:'USD', notes:'royalcaribbean.com → My Cruises — Pompeii or Amalfi', status:'sp-notbooked', payments:[] },
-    { group:'excursions',name:'Taormina — Pearl of Sicily (Aug 8)', currency:'USD', notes:'royalcaribbean.com → My Cruises — book early', status:'sp-notbooked', payments:[] },
-    { group:'onboard',   name:'Specialty dining onboard', currency:'USD', notes:'Book at Guest Services Day 1', status:'sp-tbd', payments:[] },
-    { group:'onboard',   name:'Drinks package (if purchased)', currency:'USD', status:'sp-tbd', payments:[] },
-    { group:'onboard',   name:'Gratuities', currency:'USD', notes:'Auto-added daily or pre-pay at royalcaribbean.com', status:'sp-tbd', payments:[] },
-    { group:'onboard',   name:'Spa / misc onboard', currency:'USD', status:'sp-tbd', payments:[] },
-    { group:'essentials',name:'Travel insurance', currency:'USD', notes:'Covers flights, cruise, and cancellations — get this now', status:'sp-notbooked', payments:[] },
-    { group:'essentials',name:'Vueling luggage add-on', currency:'EUR', notes:'Add at vueling.com — much cheaper than at the airport', status:'sp-notbooked', payments:[] },
-    { group:'essentials',name:'Paris Navigo Découverte passes (×2)', due:'70', currency:'EUR', notes:'~€35/person incl. card fee — buy at CDG', status:'sp-tbd', payments:[] },
-    { group:'essentials',name:'Venice Vaporetto 48-hr passes (×2)', due:'70', currency:'EUR', notes:'~€35/person — buy at Piazzale Roma', status:'sp-tbd', payments:[] },
-  ];
+  const seed = []
 
   seed.forEach(s => {
     const b = { id:nextId++, group:s.group, name:s.name, conf:s.conf||'', notes:s.notes||'', due:s.due||'', dueDate:s.dueDate||'', currency:s.currency||'USD', status:s.status||'sp-tbd', payments:s.payments||[] };
@@ -2566,13 +2435,17 @@ function downloadUpdated() {
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   seedBookings();
+  seedActivities();
   recalcAll();
   injectActivityButtons();
   injectAddNoteButtons();
   renderTicketsTab();
   renderCalendarActivities();
+  renderActivityChips();
   updateArchivedCount();
 });
+
+function seedActivities() {}
 
 
 // ══════════════════════════════════════════
@@ -2595,7 +2468,7 @@ const TYPE_COLORS = {
 };
 
 const DEST_ORDER = [
-  { key:'paris',     label:'Paris',              icon:'🗼', dates:'Jul 25–30' },
+  { key:'paris',     label:'Paris',              icon:'🗼', dates:'Jul 26–30' },
   { key:'amsterdam', label:'Amsterdam',           icon:'🚲', dates:'Jul 30 – Aug 3' },
   { key:'barcelona', label:'Barcelona',           icon:'🏛', dates:'Aug 3' },
   { key:'toulon',    label:'Toulon, France',      icon:'⚓', dates:'Aug 4' },
@@ -2877,56 +2750,191 @@ function renderActivityChips() {
   });
 }
 
-// ── TICKETS TAB — DYNAMIC RENDER ──
+// ── TICKETS TAB — FULLY UNIFIED PER-DESTINATION RENDER ──
+// Destination config: maps dest key → { label, icon, dates, links[] }
+const TICKET_DEST_CONFIG = [
+  {
+    key: 'paris', label: 'Paris', icon: '🗼', dates: 'Jul 26–30',
+    links: [
+      { urgent:true,  cat:'⚠ Book when tickets open (late May)', name:'Eiffel Tower', site:'toureiffel.paris', url:'https://www.toureiffel.paris/en/the-monument/practical-information', note:'Opens 60 days ahead. Summit sells out first. Set a reminder.' },
+      { urgent:false, cat:'Book 3–4 weeks ahead', name:'Louvre Museum', site:'louvre.fr', url:'https://www.louvre.fr/en/visit-the-louvre', note:'Timed entry required. Closed Tuesdays.' },
+      { urgent:false, cat:'Book in advance', name:"Musée d'Orsay", site:'musee-orsay.fr', url:'https://www.musee-orsay.fr/en/visit/practical-information', note:'Pre-book recommended. Closed Mondays. Late nights Thursdays.' },
+      { urgent:false, cat:'Book in advance', name:'Palace of Versailles', site:'chateauversailles.fr', url:'https://en.chateauversailles.fr/plan-your-visit', note:'Palace + Gardens access. Go early — busiest site in France.' },
+      { urgent:false, cat:'Free — timed reservation required', name:'Notre Dame Cathedral', site:'notredamedeparis.fr', url:'https://www.notredamedeparis.fr/en/visit/practical-informations/', note:'Free entry but online timed reservation required.' },
+      { urgent:true,  cat:'⚠ Skip-the-line essential', name:'Paris Catacombs', site:'catacombes.paris.fr', url:'https://www.catacombes.paris.fr/en', note:'2+ hour walk-up waits in summer. Do not go without a skip-the-line ticket.' },
+      { urgent:false, cat:'Book in advance', name:'Arc de Triomphe', site:'paris-arc-de-triomphe.fr', url:'https://www.paris-arc-de-triomphe.fr/en', note:'Rooftop entry. Book ahead.' },
+      { urgent:false, cat:'Book in advance', name:'Sainte-Chapelle', site:'sainte-chapelle.fr', url:'https://www.sainte-chapelle.fr/en', note:'Covered by Paris Museum Pass.' },
+      { urgent:false, cat:'Covers 55+ sites', name:'Paris Museum Pass', site:'parismuseumpass.com', url:'https://www.parismuseumpass.com/en', note:"4-day pass. Does NOT include Eiffel Tower or Catacombs." },
+      { urgent:false, cat:'Evening departure', name:'Seine River Cruise', site:'bateauxparisiens.com', url:'https://www.bateauxparisiens.com/en.html', note:'1-hour cruise. Book sunset departure.' },
+    ]
+  },
+  {
+    key: 'amsterdam', label: 'Amsterdam', icon: '🚲', dates: 'Jul 30 – Aug 3',
+    links: [
+      { urgent:true,  cat:'⚠ Book today — hardest ticket on the trip', name:'Anne Frank House', site:'annefrank.org', url:'https://www.annefrank.org/en/museum/tickets/', note:'Sells out months ahead, especially during WorldPride week.' },
+      { urgent:false, cat:'Book 2–4 weeks ahead', name:'Rijksmuseum', site:'rijksmuseum.nl', url:'https://www.rijksmuseum.nl/en/plan-your-visit', note:'Timed entry. Pride week demand is enormous.' },
+      { urgent:false, cat:'Book in advance', name:'Van Gogh Museum', site:'vangoghmuseum.nl', url:'https://www.vangoghmuseum.nl/en/visit/tickets-and-opening-hours', note:'Sells out. Timed entry required.' },
+      { urgent:false, cat:'WorldPride 2026', name:'Canal Parade & Events', site:'pride.amsterdam', url:'https://pride.amsterdam/en/', note:'Boat viewing spots, event schedule, street party map.' },
+      { urgent:false, cat:'Book departure time', name:'Canal Boat Cruise', site:'lovers.nl', url:'https://www.lovers.nl/en/', note:'Multiple routes. Book in advance during Pride week.' },
+      { urgent:false, cat:'Book timed entry', name:'Heineken Experience', site:'heineken-experience.com', url:'https://www.heineken-experience.com/en/tickets', note:'Fun brewery tour. Optional but enjoyable.' },
+    ]
+  },
+  {
+    key: 'barcelona', label: 'Barcelona', icon: '🏛', dates: 'Aug 3',
+    links: [
+      { urgent:true,  cat:'⚠ Book morning slot for Aug 3', name:'Sagrada Família', site:'sagradafamilia.org', url:'https://www.sagradafamilia.org/en/tickets', note:'Timed entry required. Often sold out weeks ahead in August.' },
+      { urgent:false, cat:'Complete before Amsterdam', name:'RC Online Check-In', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/booked/cruise-planner', note:'Upload passport photo, add emergency contact + credit card. Saves 30 min at the terminal.' },
+    ]
+  },
+  {
+    key: 'toulon', label: 'Toulon, France', icon: '⚓', dates: 'Aug 4',
+    links: [
+      { urgent:false, cat:'RC shore excursion', name:'Aix-en-Provence Tour', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/tln/provence-toulon-france', note:'Half-day guided excursion to Aix-en-Provence — birthplace of Cézanne.' },
+      { urgent:false, cat:'RC shore excursion', name:'Bandol Beaches & Wine', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/tln/provence-toulon-france', note:'Self-guided transfer to Bandol — golden beaches and rosé wine.' },
+    ]
+  },
+  {
+    key: 'corsica', label: 'Ajaccio, Corsica', icon: '🏝', dates: 'Aug 5',
+    links: [
+      { urgent:false, cat:'RC shore excursion', name:"Napoleon's Ajaccio & The Little Train", site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/aja/ajaccio-corsica', note:"Guided city tour including Napoleon's birthplace and the historic old town." },
+      { urgent:false, cat:'RC shore excursion', name:'Calanques de Piana Scenic Drive', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/aja/ajaccio-corsica', note:'Dramatic UNESCO red granite cliffs — jaw-dropping scenery.' },
+    ]
+  },
+  {
+    key: 'rome', label: 'Rome (Civitavecchia)', icon: '🏛', dates: 'Aug 6',
+    links: [
+      { urgent:false, cat:'Buy before the port day', name:'Trenitalia — Rome train', site:'trenitalia.com', url:'https://www.trenitalia.com/en.html', note:'Civitavecchia → Roma San Pietro ~€5. Validate before boarding.' },
+      { urgent:false, cat:'RC excursions', name:'Rome Shore Excursions', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/civ/rome-civitavecchia-italy', note:'Vatican + Rome combos if you want guide + guaranteed transport back.' },
+    ]
+  },
+  {
+    key: 'naples', label: 'Naples', icon: '🌋', dates: 'Aug 7',
+    links: [
+      { urgent:true,  cat:'⚠ Personalized tickets — book with ID', name:'Pompeii Tickets', site:'pompeii.beniculturali.it', url:'https://ticketing.pompeii.beniculturali.it', note:'Limited to 20,000/day. Non-transferable — must match ID at entry.' },
+      { urgent:false, cat:'RC excursions', name:'Naples Shore Excursions', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/nap/naples-italy', note:'Pompeii + Herculaneum, Amalfi Coast, private options.' },
+      { urgent:false, cat:'Third-party tours', name:'Pompeii Port Tours', site:'viator.com', url:'https://www.viator.com/Pompeii-tours/Port-Transfers/d24336-g24-c4032', note:'Port-pickup tours, smaller groups, often cheaper than cruise line.' },
+    ]
+  },
+  {
+    key: 'sicily', label: 'Messina / Sicily', icon: '🏔', dates: 'Aug 8',
+    links: [
+      { urgent:false, cat:'RC excursions', name:'Sicily Shore Excursions', site:'royalcaribbean.com', url:'https://www.royalcaribbean.com/shore-excursions/port/reg/sicily-italy', note:'Taormina tours, Mount Etna excursions, Messina walking tours.' },
+      { urgent:false, cat:'DIY public bus', name:'Interbus Messina–Taormina', site:'interbus.it', url:'https://www.interbus.it/en/timetable', note:'~€5 each way, ~45 min. Check return times before you go.' },
+    ]
+  },
+  {
+    key: 'ravenna', label: 'Ravenna → Venice', icon: '🚌', dates: 'Aug 10',
+    links: [
+      { urgent:true,  cat:'⚠ Book at Guest Services on Day 1', name:'RC Shuttle Guide', site:'royalcaribbeanblog.com', url:'https://www.royalcaribbeanblog.com/2024/02/12/venice-to-ravenna-cruise-port', note:'~$58/person to Venice Piazzale Roma. Fills fast.' },
+      { urgent:false, cat:'Private transfer option', name:'Ravenna → Venice Transfer', site:'viator.com', url:'https://www.viator.com/Ravenna-tours/Port-Transfers/d4236-g15-c112', note:'Pre-book private car. ~€120–160 for a group, ~2.5 hrs.' },
+    ]
+  },
+  {
+    key: 'venice', label: 'Venice', icon: '🎭', dates: 'Aug 10–12',
+    links: [
+      { urgent:false, cat:"Book timed entry", name:"Doge's Palace", site:'visitmuve.it', url:'https://palazzoducale.visitmuve.it/en/plan-your-visit/tickets/', note:"Combo with St. Mark's Basilica available." },
+      { urgent:false, cat:'Free — timed slot', name:"St. Mark's Basilica", site:'venetonet.it', url:'https://www.prenotazionib.venetonet.it/', note:'Free entry. Book timed slot to skip the queue.' },
+      { urgent:false, cat:'Book in advance', name:"Gallerie dell'Accademia", site:'gallerieaccademia.it', url:'https://www.gallerieaccademia.it/en/visit-us', note:'Venetian painting masterworks.' },
+      { urgent:false, cat:'Get on arrival', name:'Vaporetto Pass', site:'actv.avmspa.it', url:'https://actv.avmspa.it/en/content/tickets-and-passes', note:'48 or 72-hr unlimited pass. Buy at Piazzale Roma or Santa Lucia station.' },
+    ]
+  },
+];
+
+const TYPE_LABELS = { ticket:'🎟 Ticket', excursion:'⚓ Excursion', meal:'🍽 Meal', transfer:'🚌 Transfer', other:'📌 Other' };
+
 function renderTicketsTab() {
   const container = document.getElementById('act-tickets-dynamic');
   if (!container) return;
   container.innerHTML = '';
 
-  if (activities.length === 0) {
-    container.innerHTML = '<p class="act-empty" style="padding:.75rem 0">No activities added yet. Click <strong>+ Add Activity</strong> on any card to get started.</p>';
-    return;
-  }
+  TICKET_DEST_CONFIG.forEach(dest => {
+    const myActs = activities
+      .filter(a => a.dest === dest.key || dest.key === 'ravenna' && a.dest === 'other' && a.date === '2026-08-10')
+      .sort((a,b) => (a.date + (a.startTime||'')).localeCompare(b.date + (b.startTime||'')));
 
-  DEST_ORDER.forEach(dest => {
-    const destActs = activities.filter(a => a.dest === dest.key);
-    if (!destActs.length) return;
+    const hasActs  = myActs.length > 0;
+    const hasLinks = dest.links && dest.links.length > 0;
+    if (!hasActs && !hasLinks) return;
 
-    const header = document.createElement('div');
-    header.className = 'act-dest-header';
-    header.innerHTML = `<span class="act-dest-icon">${dest.icon}</span><span>${dest.label}</span><span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px">${dest.dates}</span>`;
-    container.appendChild(header);
+    // ── Destination header ──
+    const destHeader = document.createElement('div');
+    destHeader.className = 'tkt-dest-header';
+    destHeader.innerHTML = `
+      <span class="tkt-dest-icon">${dest.icon}</span>
+      <span class="tkt-dest-name">${dest.label}</span>
+      <span class="tkt-dest-dates">${dest.dates}</span>`;
+    container.appendChild(destHeader);
 
-    const grid = document.createElement('div');
-    grid.className = 'link-grid';
+    // ── BOOKINGS section (sage green) ──
+    if (hasActs) {
+      const bkgHeader = document.createElement('div');
+      bkgHeader.className = 'tkt-sub-header tkt-sub-booked';
+      bkgHeader.innerHTML = `<span class="tkt-sub-dot"></span> Bookings`;
+      container.appendChild(bkgHeader);
 
-    // Sort by date then time
-    [...destActs].sort((a,b) => (a.date+a.startTime).localeCompare(b.date+b.startTime)).forEach(a => {
-      const card = document.createElement('div');
-      card.className = 'act-ticket-card';
-      const dotColor = TYPE_COLORS[a.type] || '#8a7e6e';
-      const costUSD  = a.cost ? fmtUSD(toUSD(parseFloat(a.cost)||0, a.currency)) : null;
-      card.innerHTML = `
-        <button class="atc-edit-btn" onclick="editActivity(${a.id})" title="Edit">✏</button>
-        <div style="display:flex;gap:8px;align-items:flex-start">
-          <div class="atc-type-dot" style="background:${dotColor}"></div>
-          <div style="flex:1">
-            <div class="atc-name">${a.name}</div>
-            <div class="atc-meta">
-              ${a.date?`<span>${fmtDate(a.date)}</span>`:''}
-              ${a.startTime?`<span>${fmt12(a.startTime)}</span>`:''}
-              ${a.duration?`<span>${a.duration}</span>`:''}
+      const bkgGrid = document.createElement('div');
+      bkgGrid.className = 'tkt-grid';
+      myActs.forEach(a => {
+        const card = document.createElement('div');
+        card.className = 'tkt-act-card tkt-act-booked';
+        card.dataset.actId = a.id;
+        const dotColor = TYPE_COLORS[a.type] || '#8a7e6e';
+        const costUSD  = a.cost ? fmtUSD(toUSD(parseFloat(a.cost)||0, a.currency)) : null;
+        const statusB  = bookings.find(b => b.activityId === a.id);
+        const pillStatus = statusB ? statusB.status : 'sp-booked';
+        const pillCycle  = PILL_CYCLE.find(p => p.cls === pillStatus);
+        const pillText   = pillCycle ? pillCycle.text : 'Booked ✓';
+
+        card.innerHTML = `
+          <div class="tkt-act-top">
+            <div class="tkt-act-type-dot" style="background:${dotColor}"></div>
+            <div class="tkt-act-info">
+              <div class="tkt-act-name">${a.name}</div>
+              <div class="tkt-act-meta">
+                ${a.date ? `<span>${fmtDate(a.date)}</span>` : ''}
+                ${a.startTime ? `<span>${fmt12(a.startTime)}</span>` : ''}
+                ${a.duration  ? `<span>${a.duration}</span>` : ''}
+              </div>
+              ${a.conf  ? `<div class="tkt-act-conf">${a.conf}</div>` : ''}
+              ${costUSD ? `<div class="tkt-act-cost">${costUSD}</div>` : ''}
+              ${a.notes ? `<div class="tkt-act-notes">${a.notes}</div>` : ''}
             </div>
-            ${a.conf?`<div class="atc-conf">${a.conf}</div>`:''}
-            ${costUSD?`<div class="atc-cost">${costUSD}</div>`:''}
-            <div class="atc-origin">Added from: ${a.sourceName}</div>
-            ${a.notes?`<div class="atc-meta" style="margin-top:2px;font-style:italic">${a.notes}</div>`:''}
-          </div>
-        </div>`;
-      grid.appendChild(card);
-    });
-    container.appendChild(grid);
+            <div class="tkt-act-actions">
+              <span class="status-pill ${pillStatus}">${pillText}</span>
+              <button class="tkt-edit-btn" onclick="editActivity(${a.id})" title="Edit">✏</button>
+            </div>
+          </div>`;
+        bkgGrid.appendChild(card);
+      });
+      container.appendChild(bkgGrid);
+    }
+
+    // ── STILL TO BOOK section (blue) ──
+    if (hasLinks) {
+      const stbHeader = document.createElement('div');
+      stbHeader.className = 'tkt-sub-header tkt-sub-todo';
+      stbHeader.innerHTML = `<span class="tkt-sub-dot"></span> Recommended &amp; Still to Book`;
+      container.appendChild(stbHeader);
+
+      const linkGrid = document.createElement('div');
+      linkGrid.className = 'link-grid';
+      dest.links.forEach(lnk => {
+        const card = document.createElement('div');
+        card.className = 'link-card lc';
+        card.innerHTML = `
+          <div class="lc-cat${lnk.urgent ? ' urgent' : ''}">${lnk.cat}</div>
+          <a href="${lnk.url}" target="_blank">${lnk.name} — ${lnk.site}</a>
+          <div class="lc-note">${lnk.note}</div>`;
+        linkGrid.appendChild(card);
+      });
+      container.appendChild(linkGrid);
+    }
   });
+
+  // If nothing at all
+  if (!container.children.length) {
+    container.innerHTML = '<p style="font-size:13px;color:var(--muted);font-style:italic;padding:.5rem 0">No activities added yet. Click <strong>+ Add activity</strong> on any card to get started.</p>';
+  }
 }
 
 // ── CALENDAR TAB — INJECT ACTIVITIES ──
@@ -2993,7 +3001,7 @@ function injectActivityButtons() {
   // Buttons are injected AFTER the card element, not inside it
   const cardDefs = [
     // Paris days
-    { id:'src-paris-1',  name:'Paris · Day 1 (Jul 25)',  dest:'paris' },
+    { id:'src-paris-1',  name:'Paris · Day 1 — Flight (Jul 25)',  dest:'paris' },
     { id:'src-paris-2',  name:'Paris · Day 2 (Jul 26)',  dest:'paris' },
     { id:'src-paris-3',  name:'Paris · Day 3 (Jul 27)',  dest:'paris' },
     { id:'src-paris-4',  name:'Paris · Day 4 (Jul 28)',  dest:'paris' },
@@ -3114,7 +3122,7 @@ function addNoteToCard(card, typeCls, icon, triggerBtn, picker) {
 
 // Destination registry — maps sectionId to metadata
 const DESTINATIONS = [
-  { id:'paris',     name:'Paris',             icon:'🗼', dates:'Jul 25–30',    navLabel:'Paris',            finGroup:'paris'     },
+  { id:'paris',     name:'Paris',             icon:'🗼', dates:'Jul 26–30',    navLabel:'Paris',            finGroup:'paris'     },
   { id:'amsterdam', name:'Amsterdam',          icon:'🚲', dates:'Jul 30–Aug 3', navLabel:'Amsterdam',        finGroup:'amsterdam' },
   { id:'barcelona', name:'Barcelona → Ship',   icon:'🏛', dates:'Aug 3',        navLabel:'Barcelona → Ship', finGroup:'barcelona' },
   { id:'cruise',    name:'Cruise Ports',        icon:'🚢', dates:'Aug 3–10',     navLabel:'Cruise Ports',     finGroup:'cruise'    },
@@ -3127,17 +3135,6 @@ function openTripManager() {
   renderDestList();
   renderDaysList();
   switchTMTab('settings', document.querySelector('.tm-tab'));
-}
-
-function showAddDestForm() {
-  const form = document.getElementById('tmAddForm');
-  if (form) form.classList.add('visible');
-  renderSwatches('tmNewSwatches', 'tmNewColor', document.getElementById('tmNewColor')?.value || '#c4952a');
-}
-
-function hideAddDestForm() {
-  const form = document.getElementById('tmAddForm');
-  if (form) form.classList.remove('visible');
 }
 
 function closeTripManager(e) {
@@ -3187,16 +3184,15 @@ function renderDestList() {
 
   DESTINATIONS.forEach((dest, idx) => {
     const sec = document.getElementById('sec-' + dest.id);
+    const navBtn = [...document.querySelectorAll('.nav-btn')]
+      .find(b => b.textContent.trim() === dest.navLabel);
     const hidden = sec ? sec.classList.contains('tm-hidden') : false;
-    const color = dest.color || '#c4952a';
 
     const row = document.createElement('div');
     row.className = 'tm-dest-row';
     row.style.opacity = hidden ? '.45' : '1';
-
     row.innerHTML = `
       <span class="tm-dest-icon">${dest.icon}</span>
-      <span class="tm-dest-swatch" data-dest="${dest.id}" title="Change color" style="background:${color}" onclick="openColorPicker('${dest.id}', this)"></span>
       <div class="tm-dest-info">
         <div class="tm-dest-name">${dest.name}</div>
         <div class="tm-dest-dates">${dest.dates}</div>
@@ -3209,82 +3205,6 @@ function renderDestList() {
   });
 }
 
-// ── INLINE COLOR PICKER ──
-function openColorPicker(destId, swatchEl) {
-  // Close any open picker first
-  document.querySelector('.tm-inline-picker')?.remove();
-
-  const picker = document.createElement('div');
-  picker.className = 'tm-inline-picker';
-  picker.style.cssText = 'background:var(--warm-white);border:1px solid var(--border);border-radius:10px;padding:.6rem .75rem;margin:.4rem 0 .2rem;box-shadow:var(--shadow-lg)';
-
-  const label = document.createElement('div');
-  label.style.cssText = 'font-family:"DM Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.45rem';
-  label.textContent = 'Pick a color';
-  picker.appendChild(label);
-
-  const swatches = document.createElement('div');
-  swatches.className = 'tm-color-swatches';
-  const dest = DESTINATIONS.find(d => d.id === destId);
-  const currentColor = dest?.color || '#c4952a';
-
-  DEST_COLORS.forEach(c => {
-    const s = document.createElement('span');
-    s.className = 'tm-swatch' + (c.hex === currentColor ? ' selected' : '');
-    s.style.background = c.hex;
-    s.title = c.label;
-    s.onclick = (e) => {
-      e.stopPropagation();
-      applyDestColor(destId, c.hex);
-      picker.remove();
-    };
-    swatches.appendChild(s);
-  });
-  picker.appendChild(swatches);
-
-  // Insert picker after the row
-  swatchEl.closest('.tm-dest-row').after(picker);
-
-  // Close on outside click
-  setTimeout(() => {
-    document.addEventListener('click', function closePicker(e) {
-      if (!picker.contains(e.target)) {
-        picker.remove();
-        document.removeEventListener('click', closePicker);
-      }
-    });
-  }, 0);
-}
-
-function applyDestColor(destId, color) {
-  const dest = DESTINATIONS.find(d => d.id === destId);
-  if (!dest) return;
-  dest.color = color;
-  const rgb = hexToRgb(color);
-
-  // Update masthead pill
-  const pill = document.querySelector(`.route-pills [data-dest-id="${destId}"]`);
-  if (pill) pill.style.cssText = `background:rgba(${rgb},0.15);border-color:rgba(${rgb},0.45);color:${color}`;
-
-  // Update journey strip dot
-  const jstop = document.querySelector(`.journey-inner [data-jdest="${destId}"]`);
-  if (jstop) {
-    const dot = jstop.querySelector('.jdot');
-    if (dot) { dot.style.borderColor = color; dot.style.background = `rgba(${rgb},0.25)`; }
-  }
-
-  // Update day badge colors in section
-  const sec = document.getElementById('sec-' + destId);
-  if (sec) {
-    sec.querySelectorAll('.day-badge[style*="background"]').forEach(badge => {
-      badge.style.background = color;
-    });
-  }
-
-  // Re-render the dest list so the swatch updates
-  renderDestList();
-}
-
 function removeDestination(destId) {
   if (!confirm(`Remove "${DESTINATIONS.find(d=>d.id===destId)?.name}" from the trip?\n\nThe section will be hidden and its financials moved to "Previously Planned" — nothing is permanently deleted.`)) return;
 
@@ -3292,37 +3212,16 @@ function removeDestination(destId) {
   const sec = document.getElementById('sec-' + destId);
   if (sec) sec.classList.add('tm-hidden');
 
-  const dest = DESTINATIONS.find(d => d.id === destId);
-
   // Hide its nav button
+  const dest = DESTINATIONS.find(d => d.id === destId);
   if (dest) {
     const navBtn = [...document.querySelectorAll('.nav-btn')]
       .find(b => b.textContent.trim() === dest.navLabel);
     if (navBtn) navBtn.style.display = 'none';
   }
 
-  // Hide masthead route pill
-  const pill = document.querySelector(`.route-pills [data-dest-id="${destId}"]`);
-  if (pill) pill.style.display = 'none';
-
-  // Hide journey strip dot + adjacent lines
-  const jstop = document.querySelector(`.journey-inner [data-jdest="${destId}"]`);
-  if (jstop) {
-    jstop.style.display = 'none';
-    const prev = jstop.previousElementSibling;
-    const next = jstop.nextElementSibling;
-    if (prev && prev.classList.contains('jline')) prev.style.display = 'none';
-    else if (next && next.classList.contains('jline')) next.style.display = 'none';
-  }
-
   // Move linked financials to archived
   archiveFinancialsForDest(destId, dest?.name || destId);
-
-  // Hide booking links block for this destination
-  document.querySelectorAll(`[data-links-dest="${destId}"]`).forEach(el => el.style.display = 'none');
-
-  // Hide calendar rows for this destination
-  document.querySelectorAll(`[data-cal-dest="${destId}"]`).forEach(el => el.style.display = 'none');
 
   // If currently viewing this section, switch to first visible
   const activeSection = document.querySelector('.section.active');
@@ -3346,26 +3245,6 @@ function restoreDestination(destId) {
     if (navBtn) navBtn.style.display = '';
   }
 
-  // Restore masthead route pill
-  const pill = document.querySelector(`.route-pills [data-dest-id="${destId}"]`);
-  if (pill) pill.style.display = '';
-
-  // Restore journey strip dot + its line
-  const jstop = document.querySelector(`.journey-inner [data-jdest="${destId}"]`);
-  if (jstop) {
-    jstop.style.display = '';
-    const prev = jstop.previousElementSibling;
-    const next = jstop.nextElementSibling;
-    if (prev && prev.classList.contains('jline')) prev.style.display = '';
-    else if (next && next.classList.contains('jline')) next.style.display = '';
-  }
-
-  // Restore booking links block
-  document.querySelectorAll(`[data-links-dest="${destId}"]`).forEach(el => el.style.display = '');
-
-  // Restore calendar rows
-  document.querySelectorAll(`[data-cal-dest="${destId}"]`).forEach(el => el.style.display = '');
-
   // Move archived bookings back — find ones tagged with this dest
   const archived = document.getElementById('finArchivedBody');
   const targetGroup = document.getElementById('group-misc'); // fallback group
@@ -3387,54 +3266,11 @@ function restoreDestination(destId) {
   recalcAll();
 }
 
-// ── DESTINATION COLOR PALETTE ──
-const DEST_COLORS = [
-  { hex:'#c4952a', label:'Gold'         },
-  { hex:'#c45a2a', label:'Terracotta'   },
-  { hex:'#2a6b8a', label:'Mediterranean'},
-  { hex:'#5a7a5a', label:'Sage'         },
-  { hex:'#7846a0', label:'Violet'       },
-  { hex:'#c43060', label:'Rose'         },
-  { hex:'#2a7a6a', label:'Teal'         },
-  { hex:'#1a4a8a', label:'Navy'         },
-  { hex:'#8a4a1a', label:'Rust'         },
-  { hex:'#4a6a2a', label:'Olive'        },
-  { hex:'#6a2a5a', label:'Plum'         },
-  { hex:'#2a4a6a', label:'Slate'        },
-];
-
-function renderSwatches(containerId, hiddenId, selectedColor) {
-  const container = document.getElementById(containerId);
-  const hidden    = document.getElementById(hiddenId);
-  if (!container) return;
-  container.innerHTML = '';
-  DEST_COLORS.forEach(c => {
-    const s = document.createElement('span');
-    s.className = 'tm-swatch' + (c.hex === selectedColor ? ' selected' : '');
-    s.style.background = c.hex;
-    s.title = c.label;
-    s.onclick = () => {
-      container.querySelectorAll('.tm-swatch').forEach(x => x.classList.remove('selected'));
-      s.classList.add('selected');
-      if (hidden) hidden.value = c.hex;
-    };
-    container.appendChild(s);
-  });
-}
-
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return `${r},${g},${b}`;
-}
-
 function addDestination() {
   const icon  = document.getElementById('tmNewIcon')?.value  || '📍';
   const name  = document.getElementById('tmNewName')?.value?.trim();
   const start = document.getElementById('tmNewStart')?.value || '';
   const end   = document.getElementById('tmNewEnd')?.value   || '';
-  const color = document.getElementById('tmNewColor')?.value || '#c4952a';
   if (!name) { document.getElementById('tmNewName').focus(); return; }
 
   const id = 'dest-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g,'-');
@@ -3442,10 +3278,10 @@ function addDestination() {
     ? fmtDate(start) + ' – ' + fmtDate(end)
     : start ? 'From ' + fmtDate(start) : '';
 
-  // Add to registry (with color)
-  DESTINATIONS.push({ id, name, icon, dates, navLabel: name, finGroup: id, color });
+  // Add to registry
+  DESTINATIONS.push({ id, name, icon, dates, navLabel: name, finGroup: id });
 
-  // ── Create section ──
+  // Create section
   const main = document.querySelector('.main');
   const secCal = document.getElementById('sec-tickets');
   const section = document.createElement('div');
@@ -3455,12 +3291,12 @@ function addDestination() {
     <div class="section-h">${icon} ${name} &nbsp;<span>·</span>&nbsp; ${dates}</div>
     <p class="section-intro">Add day cards using the Day Cards tab in ⚙ Manage Trip, or use the + Add note button on any card.</p>
     <div class="day-card" data-dest="${id}">
-      <div class="day-header"><span class="day-badge" style="background:${color};color:#fff">${icon} ${name.toUpperCase()}</span><div><div class="day-title">Day 1</div></div></div>
+      <div class="day-header"><span class="day-badge" style="background:var(--gold);color:var(--warm-white)">${icon} ${name.toUpperCase()}</span><div><div class="day-title">Day 1</div></div></div>
       <ul class="timeline"><li><span class="ttime">NOTE</span><span class="tcontent">Add your plans here. Use ✏ Edit to update any text.</span></li></ul>
     </div>`;
   main.insertBefore(section, secCal);
 
-  // ── Add nav button ──
+  // Add nav button
   const navInner = document.querySelector('.nav-inner');
   const calBtn = [...document.querySelectorAll('.nav-btn')]
     .find(b => b.textContent.trim() === 'All Tickets');
@@ -3471,36 +3307,7 @@ function addDestination() {
   if (calBtn) navInner.insertBefore(navBtn, calBtn);
   else navInner.appendChild(navBtn);
 
-  // ── Add masthead route pill ──
-  const rgb = hexToRgb(color);
-  const pill = document.createElement('span');
-  pill.className = 'rpill';
-  pill.dataset.destId = id;
-  pill.style.cssText = `background:rgba(${rgb},0.15);border-color:rgba(${rgb},0.45);color:${color}`;
-  pill.textContent = `${icon} ${name}${dates ? '  ·  ' + dates : ''}`;
-  document.querySelector('.route-pills')?.appendChild(pill);
-
-  // ── Add journey strip stop ──
-  const journeyInner = document.querySelector('.journey-inner');
-  if (journeyInner) {
-    // Add a connecting line first (if there are existing visible stops)
-    const existingStops = journeyInner.querySelectorAll('.jstop:not([style*="none"])');
-    if (existingStops.length > 0) {
-      const line = document.createElement('div');
-      line.className = 'jline';
-      journeyInner.appendChild(line);
-    }
-    const stop = document.createElement('div');
-    stop.className = 'jstop';
-    stop.dataset.jdest = id;
-    stop.innerHTML = `
-      <div class="jdot" style="border-color:${color};background:rgba(${rgb},0.25)"></div>
-      <div class="jlabel">${name}</div>
-      ${dates ? `<div class="jdate">${dates}</div>` : ''}`;
-    journeyInner.appendChild(stop);
-  }
-
-  // ── Add financials group ──
+  // Add financials group
   const finSec = document.getElementById('sec-financials');
   const finBreakdown = finSec?.querySelector('.fin-section-title:last-of-type');
   const newGroup = document.createElement('div');
@@ -3510,37 +3317,6 @@ function addDestination() {
     <button class="btn-add-booking" onclick="addBooking('${id}')">+ Add expense</button>`;
   if (finBreakdown) finSec.insertBefore(newGroup, finBreakdown.closest('.fin-section-title'));
 
-  // ── Add booking links placeholder in All Tickets ──
-  const ticketsSection = document.getElementById('sec-tickets');
-  if (ticketsSection) {
-    const linksBlock = document.createElement('div');
-    linksBlock.setAttribute('data-links-dest', id);
-    linksBlock.innerHTML = `
-      <div class="link-section-title">${icon} ${name}</div>
-      <div class="link-grid">
-        <div class="link-card lc" style="border-style:dashed;opacity:.75">
-          <div class="lc-cat" style="color:${color}">✏ Add your booking links</div>
-          <div class="lc-note" style="color:var(--muted);font-style:italic">Switch to Edit mode to customise links and notes for ${name}.</div>
-        </div>
-      </div>`;
-    const ornament = ticketsSection.querySelector('.ornament');
-    if (ornament) ticketsSection.insertBefore(linksBlock, ornament);
-    else ticketsSection.appendChild(linksBlock);
-  }
-
-  // ── Add calendar glance row if dates provided ──
-  const calOverviewCard = document.querySelector('#sec-calendar .day-card[data-cal-dest="all"]');
-  if (calOverviewCard && dates) {
-    const glanceEl = calOverviewCard.querySelector('.glance');
-    if (glanceEl) {
-      const row = document.createElement('div');
-      row.className = 'glance-row';
-      row.setAttribute('data-cal-dest', id);
-      row.innerHTML = `<span class="glance-time" style="color:${color}">${dates}</span><span class="glance-text"><strong>${icon} ${name}</strong> — Add your plans in the ${name} section.</span>`;
-      glanceEl.appendChild(row);
-    }
-  }
-
   // Inject add-note buttons for new cards
   injectAddNoteButtons();
 
@@ -3549,8 +3325,6 @@ function addDestination() {
   document.getElementById('tmNewIcon').value = '📍';
   document.getElementById('tmNewStart').value = '';
   document.getElementById('tmNewEnd').value = '';
-  document.getElementById('tmNewColor').value = '#c4952a';
-  renderSwatches('tmNewSwatches', 'tmNewColor', '#c4952a');
 
   renderDestList();
   renderDaysList();
@@ -3716,208 +3490,127 @@ function addDayCard(dest) {
   if (navBtn) showSection(dest.id, navBtn);
 }
 
-// ── NEW TRIP / FULL RESET ──
-function startNewTrip() {
-  if (!confirm('Start a new trip?\n\nYour current trip will be automatically saved to Past Trips before wiping — you can restore it anytime.\n\nContinue?')) return;
+// ── RESET TO BLANK ──
+function resetToBlankTrip() {
+  if (!confirm('This will remove all day cards, port cards, financials entries, and activities.\n\nTrip settings will be kept. This cannot be undone — save a copy first if needed.\n\nContinue?')) return;
 
-  // Archive current trip to localStorage first
-  archiveCurrentTrip();
-
-  // Clear booking links sections
-  document.querySelectorAll('[data-links-dest]').forEach(el => el.style.display = 'none');
-
-  // Clear calendar glance rows and overview card
-  const calSection = document.getElementById('sec-calendar');
-  if (calSection) {
-    calSection.querySelectorAll('[data-cal-dest]').forEach(el => el.style.display = 'none');
-  }
-
-  // Clear alert banners and flight boxes
-  document.querySelectorAll('.alert-banner, .flight-box').forEach(el => el.style.display = 'none');
-
-  // Clear booking priority checklist
-  document.querySelectorAll('[data-dest-block="all"]').forEach(el => el.style.display = 'none');
-
-  // Reset All Tickets intro text
-  const ticketsIntro = document.querySelector('#sec-tickets .section-intro');
-  if (ticketsIntro) ticketsIntro.textContent = 'Add destinations in ⚙ Manage Trip, then add activities from your day cards. Booking links for each destination will appear here automatically.';
-
-  // Reset Calendar intro
-  const calIntro = document.querySelector('#sec-calendar .section-intro');
-  if (calIntro) calIntro.textContent = 'Add destinations in ⚙ Manage Trip to build your calendar.';
-
-  // 1. Remove all day/port cards
+  // Clear all day/port cards
   document.querySelectorAll('.day-card, .port-card').forEach(c => c.remove());
 
-  // 2. Hide all destination sections
-  DESTINATIONS.forEach(dest => {
-    const sec = document.getElementById('sec-' + dest.id);
-    if (sec) sec.classList.add('tm-hidden');
-  });
-
-  // 3. Hide all destination nav buttons
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    const isUtil = ['All Tickets','Full Calendar','$ Financials'].includes(btn.textContent.trim());
-    if (!isUtil) btn.style.display = 'none';
-  });
-
-  // 4. Clear masthead route pills and journey strip
-  document.querySelectorAll('.route-pills .rpill').forEach(p => p.style.display = 'none');
-  document.querySelectorAll('.journey-inner .jstop, .journey-inner .jline').forEach(el => el.style.display = 'none');
-
-  // 5. Reset masthead text
-  const h1 = document.querySelector('.masthead h1');
-  if (h1) h1.innerHTML = 'My New <em>Trip</em>';
-  const sub = document.querySelector('.masthead-sub');
-  if (sub) sub.textContent = 'Add destinations in ⚙ Manage Trip to get started';
-  const eyebrow = document.querySelector('.masthead-eyebrow');
-  if (eyebrow) eyebrow.textContent = 'Travel Packet';
-
-  // 6. Clear all bookings
+  // Clear all bookings and re-render
   bookings = [];
   GROUPS.forEach(g => {
     const el = document.getElementById('group-' + g);
     if (el) el.innerHTML = '';
   });
-  // Also clear any dynamic destination groups
-  DESTINATIONS.forEach(dest => {
-    const el = document.getElementById('group-' + dest.id);
-    if (el) el.innerHTML = '';
-  });
 
-  // 7. Clear archived financials
-  const arch = document.getElementById('finArchivedBody');
-  if (arch) arch.innerHTML = '';
-  const archSec = document.getElementById('finArchivedSection');
-  if (archSec) archSec.style.display = 'none';
-  updateArchivedCount();
-
-  // 8. Clear activities
+  // Clear activities
   activities = [];
   renderActivityChips();
   renderTicketsTab();
   renderCalendarActivities();
   recalcAll();
 
-  // 9. Switch to first available section (financials or tickets)
-  const firstUtil = document.querySelector('.nav-btn:not([style*="none"])');
-  if (firstUtil) firstUtil.click();
-
-  // 10. Re-render trip manager lists
-  renderDestList();
-  renderDaysList();
+  // Clear archived
+  const arch = document.getElementById('finArchivedBody');
+  if (arch) arch.innerHTML = '';
+  updateArchivedCount();
 
   closeTripManager();
 }
 
 
-// ══════════════════════════════════════════
-// PAST TRIPS — localStorage archive
-// ══════════════════════════════════════════
-
-const PT_KEY = 'travelPacketPastTrips';
-
-function ptLoad() {
-  try { return JSON.parse(localStorage.getItem(PT_KEY) || '[]'); }
-  catch(e) { return []; }
-}
-
-function ptSave(trips) {
-  try { localStorage.setItem(PT_KEY, JSON.stringify(trips)); }
-  catch(e) { alert('Could not save to browser storage — you may be in private browsing mode. Use Download instead.'); }
-}
-
-function archiveCurrentTrip(name) {
-  const trips = ptLoad();
-  const snapshot = {
-    id: Date.now(),
-    name: name || document.getElementById('tmTripName')?.value || 'Untitled Trip',
-    sub: document.getElementById('tmTripSub')?.value || '',
-    archivedAt: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
-    destinations: DESTINATIONS
-      .filter(d => {
-        const sec = document.getElementById('sec-' + d.id);
-        return sec && !sec.classList.contains('tm-hidden');
-      })
-      .map(d => d.icon + ' ' + d.name)
-      .join(', '),
-    html: '<!DOCTYPE html>\n' + document.documentElement.outerHTML,
-  };
-  trips.unshift(snapshot);
-  ptSave(trips);
-  renderPastTrips();
-}
-
-function renderPastTrips() {
-  const list = document.getElementById('ptList');
-  if (!list) return;
-  const trips = ptLoad();
-
-  if (!trips.length) {
-    list.innerHTML = '<div class="pt-empty">No past trips yet.<br>When you start a new trip, this one gets archived here automatically.</div>';
-    return;
-  }
-
-  list.innerHTML = '';
-  trips.forEach(trip => {
-    const card = document.createElement('div');
-    card.className = 'pt-card';
-    card.innerHTML = `
-      <div class="pt-card-name">${trip.name}</div>
-      <div class="pt-card-meta">Archived ${trip.archivedAt}</div>
-      ${trip.destinations ? `<div class="pt-card-dests">${trip.destinations}</div>` : ''}
-      ${trip.sub ? `<div class="pt-card-meta" style="font-style:italic;margin-bottom:.5rem">${trip.sub}</div>` : ''}
-      <div class="pt-card-actions">
-        <button class="pt-btn pt-btn-restore" onclick="ptRestore(${trip.id})">↩ Restore</button>
-        <button class="pt-btn pt-btn-download" onclick="ptDownload(${trip.id})">↓ Download</button>
-        <button class="pt-btn pt-btn-delete" onclick="ptDelete(${trip.id})">✕ Remove</button>
-      </div>`;
-    list.appendChild(card);
-  });
-}
-
-function ptRestore(id) {
-  if (!confirm('Restore this trip? Your current trip will be archived first so you won\'t lose it.\n\nContinue?')) return;
-  const trips = ptLoad();
-  const trip = trips.find(t => t.id === id);
-  if (!trip || !trip.html) { alert('Could not find that trip\'s data.'); return; }
-  archiveCurrentTrip();
-  document.open();
-  document.write(trip.html);
-  document.close();
-}
-
-function ptDownload(id) {
-  const trips = ptLoad();
-  const trip = trips.find(t => t.id === id);
-  if (!trip || !trip.html) { alert('Could not find that trip\'s data.'); return; }
-  const safeName = (trip.name || 'trip').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const blob = new Blob([trip.html], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = safeName + '.html';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function ptDelete(id) {
-  if (!confirm('Permanently remove this past trip? This cannot be undone.')) return;
-  const trips = ptLoad().filter(t => t.id !== id);
-  ptSave(trips);
-  renderPastTrips();
-}
-
-function switchTMTab(tabId, btn) {
-  document.querySelectorAll('.tm-tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tm-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('tm-' + tabId).classList.add('active');
-  btn.classList.add('active');
-  if (tabId === 'pasttrips') renderPastTrips();
-}
-
-
 </script>
+
+<!-- ── TRIP MANAGER DRAWER ── -->
+<div class="tm-backdrop" id="tmBackdrop" onclick="closeTripManager()">
+  <div class="tm-drawer" onclick="event.stopPropagation()">
+    <div class="tm-drawer-header">
+      <span class="tm-drawer-title">⚙ Manage Trip</span>
+      <button class="tm-close" onclick="closeTripManager()">×</button>
+    </div>
+    <div class="tm-drawer-body">
+
+      <!-- Trip settings -->
+      <div class="tm-section-label">Trip name</div>
+      <input class="tm-input" id="tm-trip-name" placeholder="e.g. Europe Summer 2026">
+
+      <div class="tm-row">
+        <div>
+          <div class="tm-section-label">Start date</div>
+          <input type="date" class="tm-input" id="tm-start-date">
+        </div>
+        <div>
+          <div class="tm-section-label">End date</div>
+          <input type="date" class="tm-input" id="tm-end-date">
+        </div>
+      </div>
+
+      <div class="tm-row">
+        <div>
+          <div class="tm-section-label">Travelers</div>
+          <input type="number" class="tm-input" id="tm-travelers" min="1" max="20" placeholder="2">
+        </div>
+        <div>
+          <div class="tm-section-label">Home currency</div>
+          <select class="tm-input" id="tm-currency">
+            <option value="USD">USD — US Dollar</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="CAD">CAD — Canadian Dollar</option>
+            <option value="AUD">AUD — Australian Dollar</option>
+            <option value="JPY">JPY — Japanese Yen</option>
+          </select>
+        </div>
+      </div>
+      <button class="tm-btn-add" style="width:100%;margin-bottom:.25rem" onclick="saveTripSettings()">Save settings</button>
+
+      <!-- Destinations -->
+      <div class="tm-section-label" style="margin-top:1.5rem">Destinations</div>
+      <div class="tm-dest-list" id="tmDestList"></div>
+
+      <button class="btn-show-add-dest" onclick="showAddDestForm()">+ Add destination</button>
+
+      <!-- Add destination form (hidden by default) -->
+      <div class="tm-add-form" id="tmAddForm">
+        <div class="tm-section-label" style="margin-top:0">New destination</div>
+        <div class="tm-add-row">
+          <input class="tm-emoji-input" id="tm-new-emoji" value="📍" maxlength="2">
+          <input class="tm-input" id="tm-new-name" placeholder="City or place name" style="margin-bottom:0">
+        </div>
+        <div class="tm-row">
+          <div>
+            <div class="tm-section-label">From</div>
+            <input type="date" class="tm-input" id="tm-new-start">
+          </div>
+          <div>
+            <div class="tm-section-label">To</div>
+            <input type="date" class="tm-input" id="tm-new-end">
+          </div>
+        </div>
+        <div class="tm-section-label">Type</div>
+        <select class="tm-input" id="tm-new-type">
+          <option value="city">City stay</option>
+          <option value="cruise">Cruise port</option>
+          <option value="transit">Transit / travel day</option>
+          <option value="resort">Resort / beach</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="tm-form-actions">
+          <button class="tm-btn-cancel" onclick="hideAddDestForm()">Cancel</button>
+          <button class="tm-btn-add" onclick="addDestination()">Add destination</button>
+        </div>
+      </div>
+
+      <!-- Archived destinations -->
+      <div id="tmArchivedDests" style="display:none">
+        <div class="tm-section-label" style="margin-top:1.5rem;color:var(--muted)">Removed destinations</div>
+        <div class="tm-dest-list" id="tmArchivedDestList"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
